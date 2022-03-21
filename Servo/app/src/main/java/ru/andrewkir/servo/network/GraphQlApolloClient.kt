@@ -17,7 +17,7 @@ import java.net.SocketTimeoutException
 class RickAndMortyClient(context: Context) : BaseApolloClient() {
     private var apolloClient: ApolloClient = apolloClient(context)
 
-    fun getCharacters(page: Int): ApolloCall<GetCharactersQuery.Data> {
+    fun  getCharacters(page: Int): ApolloCall<GetCharactersQuery.Data> {
         return apolloClient.query(GetCharactersQuery(Input.optional(page)))
     }
 }
