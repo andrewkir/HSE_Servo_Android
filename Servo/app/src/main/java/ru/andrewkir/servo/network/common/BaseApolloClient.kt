@@ -1,11 +1,13 @@
 package ru.andrewkir.servo.network.common
 
 import android.content.Context
+import android.util.Log
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.http.HttpRequest
 import com.apollographql.apollo3.api.http.HttpResponse
 import com.apollographql.apollo3.network.http.HttpInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptorChain
+import com.apollographql.apollo3.network.http.LoggingInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import ru.andrewkir.servo.BuildConfig
@@ -16,12 +18,18 @@ open class BaseApolloClient {
         ApolloClient
             .Builder()
             .serverUrl(BASE_URL)
+            .addHttpInterceptor(LoggingInterceptor { str: String -> Log.d("APOLLO", str) })
             .addHttpInterceptor(AuthorizationInterceptor("PLACE TOKEN HERE"))
             .build()
 
     class AuthorizationInterceptor(val token: String) : HttpInterceptor {
-        override suspend fun intercept(request: HttpRequest, chain: HttpInterceptorChain): HttpResponse {
-            return chain.proceed(request.newBuilder().addHeader("Authorization", "Bearer $token").build())
+        override suspend fun intercept(
+            request: HttpRequest,
+            chain: HttpInterceptorChain
+        ): HttpResponse {
+            return chain.proceed(
+                request.newBuilder().addHeader("Authorization", "Bearer $token").build()
+            )
         }
     }
 

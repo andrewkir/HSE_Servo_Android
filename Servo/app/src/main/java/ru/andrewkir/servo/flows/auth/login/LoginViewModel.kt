@@ -4,19 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.andrewkir.GetCharactersQuery
-import ru.andrewkir.servo.flows.auth.AuthRepository
+import ru.andrewkir.SignupUserMutation
 import ru.andrewkir.servo.common.BaseViewModel
+import ru.andrewkir.servo.flows.auth.AuthRepository
 import ru.andrewkir.servo.network.common.ApiResponse
 
 class LoginViewModel(
     private val repo: AuthRepository
 ) : BaseViewModel(repo) {
 
-    private val mutableLoginResponse: MutableLiveData<GetCharactersQuery.Data> =
+    private val mutableLoginResponse: MutableLiveData<SignupUserMutation.Data> =
         MutableLiveData()
 
-    val loginResponse: LiveData<GetCharactersQuery.Data>
+    val loginResponse: LiveData<SignupUserMutation.Data>
         get() = mutableLoginResponse
 
     fun loginByUsername(username: String, password: String) {

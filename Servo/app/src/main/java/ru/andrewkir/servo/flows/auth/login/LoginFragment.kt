@@ -8,12 +8,9 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import ru.andrewkir.servo.common.BaseFragment
-import ru.andrewkir.servo.common.startActivityClearBackStack
 import ru.andrewkir.servo.databinding.FragmentLoginBinding
 import ru.andrewkir.servo.flows.auth.AuthRepository
-import ru.andrewkir.servo.flows.mainScreen.MainScreenActivity
-import ru.andrewkir.servo.network.RickAndMortyClient
-import ru.andrewkir.servo.network.common.ApiResponse
+import ru.andrewkir.servo.network.ApolloProvider
 
 class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLoginBinding>() {
 
@@ -21,7 +18,7 @@ class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLogin
 
     override fun provideRepository(): AuthRepository =
         AuthRepository(
-            RickAndMortyClient(
+            ApolloProvider(
                 requireContext()
             )
         )
@@ -105,7 +102,7 @@ class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLogin
         viewModel.loginResponse.observe(viewLifecycleOwner, Observer {
             Toast.makeText(
                 requireContext(),
-                it.characters!!.results!![0]!!.name!!,
+                it.signupUser.firstName,
                 Toast.LENGTH_SHORT
             ).show()
 

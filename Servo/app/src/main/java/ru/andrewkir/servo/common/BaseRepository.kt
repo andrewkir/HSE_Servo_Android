@@ -2,12 +2,12 @@ package ru.andrewkir.servo.common
 
 import com.apollographql.apollo3.ApolloCall
 import com.apollographql.apollo3.api.ApolloResponse
+import com.apollographql.apollo3.api.Mutation
+import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Query
 import com.apollographql.apollo3.exception.ApolloException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
-import ru.andrewkir.GetCharactersQuery
 import ru.andrewkir.servo.network.common.ApiResponse
 import java.net.SocketTimeoutException
 
@@ -16,7 +16,7 @@ abstract class BaseRepository {
     suspend fun <T: ApolloCall<D>, D> protectedApiCall(
         apolloCall: T
     ): ApiResponse<ApolloResponse<D>>
-        where D : Query.Data
+        where D : Operation.Data
     {
         return withContext(Dispatchers.IO) {
             try {

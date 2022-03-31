@@ -1,16 +1,23 @@
 package ru.andrewkir.servo.flows.auth
 
 import ru.andrewkir.servo.common.BaseRepository
-import ru.andrewkir.servo.network.RickAndMortyClient
+import ru.andrewkir.servo.network.ApolloProvider
+import ru.andrewkir.type.UserCreateInput
 
 class AuthRepository(
-    private val api: RickAndMortyClient
+    private val api: ApolloProvider
 ) : BaseRepository() {
 
     suspend fun loginByEmail(
         email: String,
         password: String
-    ) = protectedApiCall(api.getCharacters(0))
+    ) = protectedApiCall(api.signUpUser(UserCreateInput(
+        email = email,
+        username = email,
+        password = password,
+        firstName = email,
+        lastName = email
+    )))
 //
 //    suspend fun loginByUsername(
 //        username: String,
