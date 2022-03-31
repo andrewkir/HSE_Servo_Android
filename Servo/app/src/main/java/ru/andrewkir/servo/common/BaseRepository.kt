@@ -6,8 +6,6 @@ import com.apollographql.apollo3.api.Query
 import com.apollographql.apollo3.exception.ApolloException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
-import ru.andrewkir.GetCharactersQuery
 import ru.andrewkir.servo.network.common.ApiResponse
 import java.net.SocketTimeoutException
 

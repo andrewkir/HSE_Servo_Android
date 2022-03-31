@@ -7,11 +7,11 @@ class AuthRepository(
     private val api: RickAndMortyClient
 ) : BaseRepository() {
 
-    suspend fun loginByEmail(
-        email: String,
-        password: String
-    ) = protectedApiCall(api.getCharacters(0))
-//
+//    suspend fun loginByEmail(
+//        email: String,
+//        password: String
+//    ) = protectedApiCall(api.getCharacters(0))
+
 //    suspend fun loginByUsername(
 //        username: String,
 //        password: String

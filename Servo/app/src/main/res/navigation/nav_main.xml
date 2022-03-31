@@ -7,15 +7,15 @@
 
     <save_state_fragment
         android:id="@+id/main"
-        android:name="ru.andrewkir.hse_mooc.flows.courses.main.CoursesMainFragment"
+        android:name="ru.andrewkir.servo."
         android:label="fragment_courses"
-        tools:layout="@layout/fragment_courses_main" />
+        tools:layout="@layout/fragment_login" />
     <save_state_fragment
         android:id="@+id/search"
         android:name="ru.andrewkir.hse_mooc.flows.courses.search.CoursesSearchFragment"
         android:label="CoursesSearchFragment" />
     <save_state_fragment
         android:id="@+id/profile"
-        android:name="ru.andrewkir.hse_mooc.flows.courses.profile.ProfileFragment"
+        android:name="ru.andrewkir.servo.flows.mainScreen.profile.ProfileFragment"
         android:label="ProfileFragment" />
 </navigation>
