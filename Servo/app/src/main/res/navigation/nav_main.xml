@@ -3,19 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_courses"
-    app:startDestination="@id/main">
+    app:startDestination="@id/dashboard">
 
     <save_state_fragment
-        android:id="@+id/main"
-        android:name="ru.andrewkir.servo."
-        android:label="fragment_courses"
-        tools:layout="@layout/fragment_login" />
-    <save_state_fragment
-        android:id="@+id/search"
-        android:name="ru.andrewkir.hse_mooc.flows.courses.search.CoursesSearchFragment"
-        android:label="CoursesSearchFragment" />
+        android:id="@+id/dashboard"
+        android:name="ru.andrewkir.servo.flows.main.dashboard.DashboardFragment"
+        android:label="DashboardFragment" />
     <save_state_fragment
         android:id="@+id/profile"
-        android:name="ru.andrewkir.servo.flows.mainScreen.profile.ProfileFragment"
+        android:name="ru.andrewkir.servo.flows.main.profile.ProfileFragment"
         android:label="ProfileFragment" />
 </navigation>

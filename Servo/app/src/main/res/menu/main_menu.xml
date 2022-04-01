@@ -3,15 +3,11 @@
         android:id="@+id/dashboard"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_foreground"
-        android:title="TODO 1"/>
-    <item
-        android:id="@+id/insights"
-        android:enabled="true"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="TODO 2"/>
+        android:title="dashboard"/>
+
     <item
         android:id="@+id/profile"
         android:enabled="true"
         android:icon="@drawable/ic_launcher_foreground"
-        android:title="TODO 3"/>
+        android:title="profile"/>
 </menu>

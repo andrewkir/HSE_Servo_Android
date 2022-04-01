@@ -1,4 +1,4 @@
-package ru.andrewkir.servo.flows.mainScreen
+package ru.andrewkir.servo.flows.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -13,7 +13,6 @@ import ru.andrewkir.servo.databinding.ActivityMainScreenBinding
 class MainScreenActivity : AppCompatActivity() {
     private lateinit var bind: ActivityMainScreenBinding
 
-    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActivityMainScreenBinding.inflate(layoutInflater)

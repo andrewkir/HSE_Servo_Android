@@ -1,15 +1,14 @@
-package ru.andrewkir.servo.flows.mainScreen.profile
+package ru.andrewkir.servo.flows.main.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ru.andrewkir.hse_mooc.databinding.FragmentProfileBinding
-import ru.andrewkir.hse_mooc.flows.courses.profile.ProfileViewModel
 import ru.andrewkir.servo.common.BaseFragment
+import ru.andrewkir.servo.databinding.EmptyFragmentBinding
 
 class ProfileFragment :
-    BaseFragment<ProfileViewModel, ProfileRepository, FragmentProfileBinding>() {
+    BaseFragment<ProfileViewModel, ProfileRepository, EmptyFragmentBinding>() {
 
 //    private lateinit var recyclerFavoritesAdapter: CoursePreviewRecyclerViewAdapter
 //    private lateinit var linearFavoritesLayoutManager: LinearLayoutManager
@@ -33,7 +32,7 @@ class ProfileFragment :
     override fun provideBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ) = FragmentProfileBinding.inflate(inflater, container, false)
+    ) = EmptyFragmentBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

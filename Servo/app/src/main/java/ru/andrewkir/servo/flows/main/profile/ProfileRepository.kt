@@ -1,4 +1,4 @@
-package ru.andrewkir.servo.flows.mainScreen.profile
+package ru.andrewkir.servo.flows.main.profile
 
 import ru.andrewkir.servo.common.BaseRepository
 

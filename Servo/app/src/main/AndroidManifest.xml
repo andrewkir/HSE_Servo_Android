@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".flows.auth.AuthActivity"/>
+        <activity android:name=".flows.main.MainScreenActivity"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
