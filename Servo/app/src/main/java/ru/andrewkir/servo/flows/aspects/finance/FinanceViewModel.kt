@@ -1,7 +1,7 @@
 package ru.andrewkir.servo.flows.aspects.finance
 
-import android.util.Log
 import ru.andrewkir.servo.common.BaseViewModel
+import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import javax.inject.Inject
 
 class FinanceViewModel @Inject constructor(
