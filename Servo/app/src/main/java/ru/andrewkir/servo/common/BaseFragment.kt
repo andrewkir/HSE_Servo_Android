@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
+import ru.andrewkir.servo.App
+import javax.inject.Inject
 
 
 abstract class BaseFragment<viewModel : BaseViewModel, repo : BaseRepository, viewBinding : ViewBinding> :
@@ -17,6 +19,9 @@ abstract class BaseFragment<viewModel : BaseViewModel, repo : BaseRepository, vi
 
     protected lateinit var userPrefsManager: UserPrefsManager
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,9 +29,7 @@ abstract class BaseFragment<viewModel : BaseViewModel, repo : BaseRepository, vi
     ): View? {
         bind = provideBinding(inflater, container)
         userPrefsManager = UserPrefsManager(requireContext())
-
-        val viewModelFactory = ViewModelFactory(provideRepository())
-        viewModel = ViewModelProvider(this, viewModelFactory)[provideViewModelClass()]
+        viewModel = provideViewModel()
 
         return bind.root
     }
@@ -42,9 +45,7 @@ abstract class BaseFragment<viewModel : BaseViewModel, repo : BaseRepository, vi
 //    }
 
 
-    abstract fun provideViewModelClass(): Class<viewModel>
-
-    abstract fun provideRepository(): repo
+    abstract fun provideViewModel(): viewModel
 
     abstract fun provideBinding(inflater: LayoutInflater, container: ViewGroup?): viewBinding
 }

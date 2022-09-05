@@ -1,16 +1,22 @@
 package ru.andrewkir.servo.flows.main.dashboard
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 //import ru.andrewkir.hse_mooc.network.responses.ApiResponse
 //import ru.andrewkir.hse_mooc.network.responses.Categories.CategoriesResponse
 //import ru.andrewkir.hse_mooc.network.responses.CoursesPreview.CoursePreview
 import ru.andrewkir.servo.common.BaseViewModel
+import ru.andrewkir.servo.flows.aspects.finance.*
+import java.util.*
+import javax.inject.Inject
 
 
-class DashboardViewModel(
-    private val searchRepository: DashboardRepository
-) : BaseViewModel(searchRepository) {
+class DashboardViewModel @Inject constructor(
+    val dashboardRepository: DashboardRepository,
+    private val financeRepository: FinanceRepository
+) : BaseViewModel(dashboardRepository) {
+
+    fun getData(): ArrayList<FinanceObject> = financeRepository.getData()
+
 //
 //    private val mutableCourses = arrayListOf<CoursePreview>()
 //    private val mutableCoursesLiveData: MutableLiveData<List<CoursePreview>> = MutableLiveData()
@@ -27,9 +33,9 @@ class DashboardViewModel(
 //
 //    val categoryResponse: MutableLiveData<ApiResponse<CategoriesResponse>> = MutableLiveData()
 //
-//    init {
-//        isLastPage.value = true
-//    }
+    init {
+        Log.d("VIEWMODEL","INIT viewmodel")
+    }
 //
 //    private var page = 1
 //    private var query = ""

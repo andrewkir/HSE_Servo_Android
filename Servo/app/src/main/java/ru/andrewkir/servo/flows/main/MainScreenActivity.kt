@@ -1,17 +1,16 @@
 package ru.andrewkir.servo.flows.main
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.plusAssign
 import androidx.navigation.ui.setupWithNavController
 import ru.andrewkir.servo.R
-import ru.andrewkir.servo.common.NavigatorSavingState
 import ru.andrewkir.servo.databinding.ActivityMainScreenBinding
 
 class MainScreenActivity : AppCompatActivity() {
     private lateinit var bind: ActivityMainScreenBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +20,7 @@ class MainScreenActivity : AppCompatActivity() {
         val navHost = supportFragmentManager
             .findFragmentById(R.id.mainScreenNavHost) as NavHostFragment
 
-        val navigator = NavigatorSavingState(this, navHost.childFragmentManager, R.id.mainScreenNavHost)
-        navHost.navController.navigatorProvider += navigator
-
-        navHost.navController.setGraph(R.navigation.nav_main)
-
-        bind.bottomNavigationView.setupWithNavController(navHost.navController)
+        navController = navHost.navController
+        bind.bottomNavigationView.setupWithNavController(navController)
     }
 }

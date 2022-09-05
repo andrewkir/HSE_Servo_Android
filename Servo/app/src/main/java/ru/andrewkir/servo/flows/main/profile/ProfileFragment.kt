@@ -4,8 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import ru.andrewkir.servo.App
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.databinding.EmptyFragmentBinding
+import ru.andrewkir.servo.flows.auth.login.LoginViewModel
+import ru.andrewkir.servo.flows.main.dashboard.DashboardRepository
+import ru.andrewkir.servo.flows.main.dashboard.DashboardViewModel
 
 class ProfileFragment :
     BaseFragment<ProfileViewModel, ProfileRepository, EmptyFragmentBinding>() {
@@ -17,17 +22,20 @@ class ProfileFragment :
 //    private lateinit var linearViewedLayoutManager: LinearLayoutManager
 
 
-    override fun provideViewModelClass() = ProfileViewModel::class.java
+    override fun provideViewModel(): ProfileViewModel {
+        (requireContext().applicationContext as App).appComponent.inject(this)
+        return ViewModelProvider(this, viewModelFactory)[ProfileViewModel::class.java]
+    }
 
-    override fun provideRepository(): ProfileRepository {
-        return ProfileRepository(
+//    override fun provideRepository(): DashboardRepository {
+//        return DashboardRepository(
 //            apiProvider.provideApi(
 //                CoursesApi::class.java,
 //                requireContext(),
 //                userPrefsManager.accessToken
 //            )
-        )
-    }
+//        )
+//    }
 
     override fun provideBinding(
         inflater: LayoutInflater,

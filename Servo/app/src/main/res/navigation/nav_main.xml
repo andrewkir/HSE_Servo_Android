@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_courses"
+    android:id="@+id/nav_main"
     app:startDestination="@id/dashboard">
 
-    <save_state_fragment
-        android:id="@+id/dashboard"
-        android:name="ru.andrewkir.servo.flows.main.dashboard.DashboardFragment"
-        android:label="DashboardFragment" />
-    <save_state_fragment
+
+    <include app:graph="@navigation/dashboard"/>
+
+    <fragment
         android:id="@+id/profile"
         android:name="ru.andrewkir.servo.flows.main.profile.ProfileFragment"
         android:label="ProfileFragment" />

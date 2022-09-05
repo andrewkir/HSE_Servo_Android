@@ -7,21 +7,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import ru.andrewkir.servo.App
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.databinding.FragmentLoginBinding
+import ru.andrewkir.servo.flows.aspects.finance.FinanceViewModel
 import ru.andrewkir.servo.flows.auth.AuthRepository
 import ru.andrewkir.servo.network.ApolloProvider
 
 class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLoginBinding>() {
 
-    override fun provideViewModelClass(): Class<LoginViewModel> = LoginViewModel::class.java
-
-    override fun provideRepository(): AuthRepository =
-        AuthRepository(
-            ApolloProvider(
-                requireContext()
-            )
-        )
+    override fun provideViewModel(): LoginViewModel {
+        (requireContext().applicationContext as App).appComponent.inject(this)
+        return ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
+    }
 
     override fun provideBinding(
         inflater: LayoutInflater,

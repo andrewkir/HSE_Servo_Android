@@ -1,4 +1,4 @@
-package ru.andrewkir.servo.flows.main.dashboard
+package ru.andrewkir.servo.flows.aspects.finance
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.viewbinding.ViewBinding
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -15,43 +14,32 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
-import ru.andrewkir.servo.common.BaseRepository
-import ru.andrewkir.servo.common.BaseViewModel
-import ru.andrewkir.servo.databinding.FragmentDashboardBinding
-import ru.andrewkir.servo.flows.aspects.finance.FinanceCategoryEnum
-import ru.andrewkir.servo.flows.aspects.finance.FinanceObject
-import ru.andrewkir.servo.flows.aspects.finance.FinanceViewModel
-import javax.inject.Inject
-import kotlin.collections.ArrayList
+import ru.andrewkir.servo.databinding.FragmentAspectFinanceBinding
 
+class FinanceFragment : BaseFragment<FinanceViewModel, FinanceRepository, FragmentAspectFinanceBinding>() {
 
-class DashboardFragment :
-    BaseFragment<DashboardViewModel, DashboardRepository, FragmentDashboardBinding>() {
+    override fun provideViewModel(): FinanceViewModel {
+        (requireContext().applicationContext as App).appComponent.inject(this)
+        return ViewModelProvider(this, viewModelFactory)[FinanceViewModel::class.java]
+    }
 
     override fun provideBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentDashboardBinding =
-        FragmentDashboardBinding.inflate(inflater, container, false)
-
-    override fun provideViewModel(): DashboardViewModel {
-            (requireContext().applicationContext as App).appComponent.inject(this)
-            return ViewModelProvider(this, viewModelFactory)[DashboardViewModel::class.java]
-    }
-
+    ): FragmentAspectFinanceBinding =
+        FragmentAspectFinanceBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupFinanceView()
 
-        bind.financeAspectCardView.setOnClickListener{
-            findNavController().navigate(R.id.action_dashboardFragment_to_financeFragment)
+        bind.button.setOnClickListener{
+            findNavController().navigate(R.id.action_financeFragment_to_dashboardFragment)
         }
     }
 
     private fun setupFinanceView(){
-//        https://medium.com/@clyeung0714/using-mpandroidchart-for-android-application-piechart-123d62d4ddc0
         bind.chart.let { pieChart ->
             val financeObjectList = viewModel.getData()
             var sum = 0.0
