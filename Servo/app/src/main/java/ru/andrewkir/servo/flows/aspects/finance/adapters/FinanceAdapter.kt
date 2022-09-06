@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,7 @@ import ru.andrewkir.servo.R
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 
-class FinanceAdapter(private val dataSet: ArrayList<FinanceObject>) :
+class FinanceAdapter(private val dataSet: ArrayList<FinanceObject>, private val listener: (FinanceObject) -> Unit) :
     RecyclerView.Adapter<FinanceAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -20,6 +21,7 @@ class FinanceAdapter(private val dataSet: ArrayList<FinanceObject>) :
         val sum: TextView = view.findViewById(R.id.sum_row)
         val date: TextView = view.findViewById(R.id.date_row)
         val color: CardView = view.findViewById(R.id.colorPlaceHolder)
+        val removeButton: ImageView = view.findViewById(R.id.removeButton)
 
         init {
 
@@ -42,11 +44,16 @@ class FinanceAdapter(private val dataSet: ArrayList<FinanceObject>) :
             color.backgroundTintList = ColorStateList.valueOf(
                 when(dataSet[position].category){
                     //TODO check
-                    FinanceCategoryEnum.GIVE_LOAN -> Color.parseColor("#2ecc71")
+                    FinanceCategoryEnum.BANK_LOAN -> Color.parseColor("#2ecc71")
                     FinanceCategoryEnum.UNOFFICIAL_LOAN -> Color.parseColor("#f1c40f")
-                    FinanceCategoryEnum.BANK_LOAN -> Color.parseColor("#e74c3c")
+                    FinanceCategoryEnum.GIVE_LOAN -> Color.parseColor("#e74c3c")
                 }
             )
+
+            removeButton.setOnClickListener {
+                listener.invoke(dataSet[adapterPosition])
+                notifyItemRemoved(adapterPosition)
+            }
         }
     }
 

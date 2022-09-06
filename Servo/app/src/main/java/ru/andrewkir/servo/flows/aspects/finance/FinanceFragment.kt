@@ -1,9 +1,15 @@
 package ru.andrewkir.servo.flows.aspects.finance
 
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +26,9 @@ import ru.andrewkir.servo.databinding.FragmentAspectFinanceBinding
 import ru.andrewkir.servo.flows.aspects.finance.adapters.FinanceAdapter
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class FinanceFragment : BaseFragment<FinanceViewModel, FinanceRepository, FragmentAspectFinanceBinding>() {
 
@@ -43,8 +52,61 @@ class FinanceFragment : BaseFragment<FinanceViewModel, FinanceRepository, Fragme
             findNavController().navigate(R.id.action_financeFragment_to_dashboardFragment)
         }
 
+        bind.newButton.setOnClickListener{
+            showDialogNewLoan()
+        }
+
         bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        bind.recyclerView.adapter = FinanceAdapter(viewModel.getData())
+        val data = viewModel.getData()
+        bind.recyclerView.adapter = FinanceAdapter(data){
+            data.remove(it)
+            setupFinanceView(bind.chart, data)
+        }
+    }
+
+    private fun showDialogNewLoan() {
+        val dialog = AlertDialog.Builder(requireContext())
+
+        val view = layoutInflater.inflate(R.layout.dialog_new_loan, null)
+
+        dialog.setView(view)
+        val name = view.findViewById<EditText>(R.id.newLoanName)
+        val date = view.findViewById<TextView>(R.id.newLoanDate)
+
+        date.setOnClickListener {
+            val c = Calendar.getInstance()
+            val datePickerDialog = DatePickerDialog(it.context,
+                { _, year, monthOfYear, dayOfMonth ->
+                    date.text = dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)
+            )
+            datePickerDialog.show()
+        }
+
+        val alertDialog = dialog
+            .setTitle("Добавление долга")
+            .setPositiveButton("Ок") { _, _ -> }
+            .setNeutralButton("Отмена") { dialog, _ -> dialog.dismiss() }
+            .create()
+
+        alertDialog.show()
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            var closeDialog = false
+            if (name.text.isBlank()) {
+                Toast.makeText(
+                    requireContext(),
+                    "Название не может быть пустым",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                closeDialog = true
+//                viewModel.postReview(
+//                    ratingBar.rating, reviewText.text.toString()
+//                )
+            }
+            if (closeDialog) alertDialog.dismiss()
+        }
     }
 
     companion object {
@@ -63,7 +125,7 @@ class FinanceFragment : BaseFragment<FinanceViewModel, FinanceRepository, Fragme
                 }
 
                 val pieEntires: MutableList<PieEntry> = ArrayList()
-                for (i in financeData.keys) {
+                for (i in financeData.keys.sortedBy { it.ordinal }) {
                     pieEntires.add(PieEntry(financeData[i] ?: 0f,
                         when(i){
                             FinanceCategoryEnum.BANK_LOAN -> "Кредит"
