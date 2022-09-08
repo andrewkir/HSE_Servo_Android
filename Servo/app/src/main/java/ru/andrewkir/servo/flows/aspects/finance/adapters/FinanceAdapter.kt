@@ -1,5 +1,6 @@
 package ru.andrewkir.servo.flows.aspects.finance.adapters
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -12,9 +13,15 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
+import java.text.SimpleDateFormat
 
-class FinanceAdapter(private val dataSet: ArrayList<FinanceObject>, private val listener: (FinanceObject) -> Unit) :
+class FinanceAdapter(private var dataSet: List<FinanceObject>, private val listener: (FinanceObject) -> Unit) :
     RecyclerView.Adapter<FinanceAdapter.ViewHolder>() {
+
+    fun setData(data: List<FinanceObject>){
+        dataSet = data
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.title_row)
@@ -35,11 +42,12 @@ class FinanceAdapter(private val dataSet: ArrayList<FinanceObject>, private val 
         return ViewHolder(view)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.run {
             title.text = dataSet[position].name
             sum.text = dataSet[position].sum.toString()
-            date.text = "27 September"
+            date.text = SimpleDateFormat("dd.MM.yyyy").format(dataSet[position].date)
 
             color.backgroundTintList = ColorStateList.valueOf(
                 when(dataSet[position].category){

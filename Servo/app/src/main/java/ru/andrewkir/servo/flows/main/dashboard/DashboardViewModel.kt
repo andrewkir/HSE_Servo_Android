@@ -16,7 +16,7 @@ class DashboardViewModel @Inject constructor(
     private val financeRepository: FinanceRepository
 ) : BaseViewModel(dashboardRepository) {
 
-    fun getData(): ArrayList<FinanceObject> = financeRepository.getData()
+    fun getData(): List<FinanceObject> = financeRepository.getData()
 
 //
 //    private val mutableCourses = arrayListOf<CoursePreview>()

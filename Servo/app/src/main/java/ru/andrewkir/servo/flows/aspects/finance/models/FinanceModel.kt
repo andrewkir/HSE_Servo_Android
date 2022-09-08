@@ -7,7 +7,7 @@ import kotlin.collections.ArrayList
 
 @Parcelize
 data class FinanceModel(
-    val financeList: ArrayList<FinanceObject>
+    val financeList: List<FinanceObject> = emptyList()
 ) : Parcelable
 
 @Parcelize

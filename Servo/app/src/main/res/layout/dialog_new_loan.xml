@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -21,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/newLoanName2"
+        android:id="@+id/newLoanSum"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -29,11 +28,11 @@
         android:ems="10"
         android:fontFamily="@font/roboto_medium"
         android:hint="Сумма"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/newLoanName" />
 
     <TextView
         android:id="@+id/textView5"
@@ -46,7 +45,7 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/newLoanName"
-        app:layout_constraintTop_toBottomOf="@+id/newLoanName" />
+        app:layout_constraintTop_toBottomOf="@+id/newLoanSum" />
 
     <TextView
         android:id="@+id/newLoanDate"
@@ -54,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:fontFamily="@font/roboto_light"
-        android:text="нажмите для добавления"
+        android:text="нажмите здесь"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView5"
         app:layout_constraintStart_toEndOf="@+id/textView5"
@@ -66,7 +65,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newLoanName2"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:selectionRequired="true"
         app:singleSelection="true">
 
@@ -75,6 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
+            android:checked="true"
             android:text="Одолжение" />
 
         <com.google.android.material.chip.Chip
