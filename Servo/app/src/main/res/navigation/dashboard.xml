@@ -7,19 +7,34 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="ru.andrewkir.servo.flows.main.dashboard.DashboardFragment"
-        android:label="DashboardFragment" >
+        android:label="DashboardFragment">
         <action
             android:id="@+id/action_dashboardFragment_to_financeFragment"
             app:destination="@id/financeFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_stepsFragment"
+            app:destination="@id/stepsFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/financeFragment"
         android:name="ru.andrewkir.servo.flows.aspects.finance.FinanceFragment"
-        android:label="FinanceFragment" >
+        android:label="FinanceFragment">
         <action
             android:id="@+id/action_financeFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/stepsFragment"
+        android:name="ru.andrewkir.servo.flows.aspects.steps.StepsFragment"
+        android:label="StepsFragment">
+        <action
+            android:id="@+id/action_stepsFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out" />

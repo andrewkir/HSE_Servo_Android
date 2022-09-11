@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.andrewkir.servo.flows.aspects.finance.FinanceRepository
+import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
 import ru.andrewkir.servo.flows.auth.AuthRepository
 import ru.andrewkir.servo.flows.main.dashboard.DashboardRepository
 import ru.andrewkir.servo.flows.main.profile.ProfileRepository
@@ -19,4 +20,6 @@ class DataModule {
     fun provideProfileRepository(): ProfileRepository = ProfileRepository()
     @Provides
     fun provideDashBoardRepository(): DashboardRepository = DashboardRepository()
+    @Provides
+    fun provideStepsRepository(): StepsRepository = StepsRepository()
 }
