@@ -1,5 +1,6 @@
 package ru.andrewkir.servo.flows.aspects.finance
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -80,6 +81,7 @@ class FinanceFragment :
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun showDialogNewLoan() {
         val dialog = AlertDialog.Builder(requireContext())
 
@@ -168,6 +170,14 @@ class FinanceFragment :
                 }
 
                 val pieEntires: MutableList<PieEntry> = ArrayList()
+                if (financeData.keys.size < 3) {
+                    if (!financeData.keys.contains(FinanceCategoryEnum.BANK_LOAN))
+                        financeData[FinanceCategoryEnum.BANK_LOAN] = 0f
+                    if (!financeData.keys.contains(FinanceCategoryEnum.GIVE_LOAN))
+                        financeData[FinanceCategoryEnum.GIVE_LOAN] = 0f
+                    if (!financeData.keys.contains(FinanceCategoryEnum.UNOFFICIAL_LOAN))
+                        financeData[FinanceCategoryEnum.UNOFFICIAL_LOAN] = 0f
+                }
                 for (i in financeData.keys.sortedBy { it.ordinal }) {
                     pieEntires.add(
                         PieEntry(
@@ -194,6 +204,7 @@ class FinanceFragment :
                 //pieChart.setMaxHighlightDistance(34);
                 pieChart.setEntryLabelTextSize(12f)
                 pieChart.holeRadius = 75f
+                pieChart.animateXY(1000, 1000)
 
                 //legend attributes
                 val legend: Legend = pieChart.legend

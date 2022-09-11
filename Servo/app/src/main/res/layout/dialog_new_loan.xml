@@ -78,14 +78,14 @@
             android:text="Одолжение" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/bankLoanChip"
+            android:id="@+id/unofficialLoanChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
             android:text="Неоф. займ" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/unofficialLoanChip"
+            android:id="@+id/bankLoanChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
