@@ -7,16 +7,23 @@ import android.util.Log
 import ru.andrewkir.servo.common.BaseViewModel
 import ru.andrewkir.servo.flows.aspects.finance.*
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
+import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
 import java.util.*
 import javax.inject.Inject
 
 
 class DashboardViewModel @Inject constructor(
     val dashboardRepository: DashboardRepository,
-    private val financeRepository: FinanceRepository
+    private val financeRepository: FinanceRepository,
+    private val stepsRepository: StepsRepository
 ) : BaseViewModel(dashboardRepository) {
 
     fun getData(): List<FinanceObject> = financeRepository.getData()
+
+
+    fun getStepsData(): List<StepsObject> = stepsRepository.getData()
 
 //
 //    private val mutableCourses = arrayListOf<CoursePreview>()

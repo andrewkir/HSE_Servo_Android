@@ -12,6 +12,7 @@ import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.databinding.FragmentDashboardBinding
 import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment.Companion.setupFinanceView
 import ru.andrewkir.servo.flows.aspects.steps.StepsFragment.Companion.setupStepsView
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import kotlin.random.Random
 
 
@@ -43,6 +44,6 @@ class DashboardFragment :
             findNavController().navigate(R.id.action_dashboardFragment_to_stepsFragment)
         }
 
-        setupStepsView(bind.stepsBarChart)
+        setupStepsView(bind.stepsBarChart, StepsModel(viewModel.getStepsData()))
     }
 }

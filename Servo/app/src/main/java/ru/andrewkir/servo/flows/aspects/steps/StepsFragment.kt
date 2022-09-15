@@ -11,33 +11,33 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.charts.BarLineChartBase
-import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import com.github.mikephil.charting.utils.ColorTemplate
+import kotlinx.coroutines.launch
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.databinding.FragmentAspectStepsBinding
-import ru.andrewkir.servo.flows.aspects.finance.adapters.FinanceAdapter
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
+import ru.andrewkir.servo.flows.aspects.finance.adapters.StepsAdapter
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
+import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class StepsFragment :
     BaseFragment<StepsViewModel, StepsRepository, FragmentAspectStepsBinding>() {
 
-    private lateinit var adapter: FinanceAdapter
+    private lateinit var adapter: StepsAdapter
 
     override fun provideViewModel(): StepsViewModel {
         (requireContext().applicationContext as App).appComponent.inject(this)
@@ -58,16 +58,29 @@ class StepsFragment :
         }
 
         bind.newButton.setOnClickListener {
-            showDialogNewLoan()
+            showDialogNewSteps()
         }
 
-        setupStepsView(bind.barChart)
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.stepsData.collect {
+                    setupStepsView(bind.barChart, it)
+                    adapter.setData(it.stepsList)
+                }
+            }
+        }
+
+        adapter = StepsAdapter(emptyList()) {
+
+        }
+        bind.recyclerView.adapter = adapter
+        bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     companion object {
-        fun setupStepsView(barChart: BarChart) {
-            val dataset = getDataSet()
+        fun setupStepsView(barChart: BarChart, stepsModel: StepsModel) {
+            val dataset = getDataSet(stepsModel)
             val data = BarData(dataset.first)
             data.barWidth = 0.5f
             data.setValueTextSize(14f)
@@ -90,18 +103,20 @@ class StepsFragment :
             barChart.axisLeft.setDrawGridLines(false)
             barChart.axisLeft.setDrawLabels(false)
             barChart.axisLeft.setDrawAxisLine(false)
-//      bind.barChart.xAxis.setDrawAxisLine(false)
+            barChart.xAxis.setDrawAxisLine(false)
             barChart.axisRight.setDrawGridLines(false)
             barChart.axisRight.setDrawLabels(false)
             barChart.axisRight.setDrawAxisLine(false)
             barChart.xAxis.textSize = 14f
             barChart.xAxis.granularity = 1f
             barChart.extraBottomOffset = 15f
-            barChart.xAxis.setAvoidFirstLastClipping(true)
+            barChart.xAxis.spaceMin = 0.5f
+            barChart.xAxis.spaceMax = 0.5f
+            barChart.xAxis.setAvoidFirstLastClipping(false)
 
             val formatter: ValueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
-                    return dataset.second[(value.toInt() - 1) % dataset.second.size]
+                    return dataset.second[value.toInt()]
                 }
             }
 
@@ -111,12 +126,13 @@ class StepsFragment :
         }
 
 
-        private fun getDataSet(): Pair<IBarDataSet, List<String>> {
+        @SuppressLint("SimpleDateFormat")
+        private fun getDataSet(stepsModel: StepsModel): Pair<IBarDataSet, List<String>> {
             val valueSet = ArrayList<BarEntry>()
             val labels = ArrayList<String>()
-            for (i in 1..5){
-                valueSet.add(BarEntry(i.toFloat(), Random().nextInt(1000).toFloat()))
-                labels.add("$i.9")
+            for (i in 0 until stepsModel.stepsList.size) {
+                valueSet.add(BarEntry(i.toFloat(), stepsModel.stepsList[i].steps.toFloat()))
+                labels.add(SimpleDateFormat("dd/MM").format(stepsModel.stepsList[i].date))
             }
 
             val barDataSet = BarDataSet(valueSet, "")
@@ -125,21 +141,15 @@ class StepsFragment :
         }
     }
 
-//    private fun getXAxisValues(): BarDataSet {
-//        return BarDataSet(date, "depenses")
-//    }
-
-
     @SuppressLint("SimpleDateFormat")
-    private fun showDialogNewLoan() {
+    private fun showDialogNewSteps() {
         val dialog = AlertDialog.Builder(requireContext())
 
-        val view = layoutInflater.inflate(R.layout.dialog_new_loan, null)
+        val view = layoutInflater.inflate(R.layout.dialog_new_steps, null)
 
         dialog.setView(view)
-        val name = view.findViewById<EditText>(R.id.newLoanName)
-        val sum = view.findViewById<EditText>(R.id.newLoanSum)
-        val date = view.findViewById<TextView>(R.id.newLoanDate)
+        val count = view.findViewById<EditText>(R.id.newStepsCount)
+        val date = view.findViewById<TextView>(R.id.newStepsDate)
 
         date.setOnClickListener {
             val c = Calendar.getInstance()
@@ -162,16 +172,10 @@ class StepsFragment :
 
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             var closeDialog = false
-            if (name.text.isBlank()) {
+            if (count.text.isBlank()) {
                 Toast.makeText(
                     requireContext(),
-                    "Название не может быть пустым",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else if (sum.text.isBlank()) {
-                Toast.makeText(
-                    requireContext(),
-                    "Сумма не может быть пустой",
+                    "Количество шагов не может быть пустым",
                     Toast.LENGTH_SHORT
                 ).show()
             } else if (date.text.toString() == "нажмите здесь") {
@@ -182,6 +186,12 @@ class StepsFragment :
                 ).show()
             } else {
                 closeDialog = true
+                viewModel.addSteps(
+                    StepsObject(
+                        date = SimpleDateFormat("dd.MM.yyyy").parse(date.text.toString()),
+                        steps = count.text.toString().toInt()
+                    )
+                )
             }
             if (closeDialog) alertDialog.dismiss()
         }
