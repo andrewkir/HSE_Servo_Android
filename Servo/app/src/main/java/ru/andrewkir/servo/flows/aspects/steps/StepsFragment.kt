@@ -11,23 +11,23 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.databinding.FragmentAspectStepsBinding
-import ru.andrewkir.servo.flows.aspects.finance.adapters.StepsAdapter
+import ru.andrewkir.servo.flows.aspects.steps.adapters.StepsAdapter
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
 import java.text.SimpleDateFormat
@@ -38,6 +38,9 @@ class StepsFragment :
     BaseFragment<StepsViewModel, StepsRepository, FragmentAspectStepsBinding>() {
 
     private lateinit var adapter: StepsAdapter
+
+    private lateinit var selectedDate: Calendar
+    private lateinit var weekAgoDate: Calendar
 
     override fun provideViewModel(): StepsViewModel {
         (requireContext().applicationContext as App).appComponent.inject(this)
@@ -53,7 +56,7 @@ class StepsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bind.button.setOnClickListener {
+        bind.backButton.setOnClickListener {
             findNavController().navigate(R.id.action_stepsFragment_to_dashboardFragment)
         }
 
@@ -61,27 +64,59 @@ class StepsFragment :
             showDialogNewSteps()
         }
 
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.stepsData.collect {
-                    setupStepsView(bind.barChart, it)
-                    adapter.setData(it.stepsList)
-                }
-            }
-        }
+        setupDate()
 
         adapter = StepsAdapter(emptyList()) {
 
         }
+
         bind.recyclerView.adapter = adapter
         bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.stepsData.collectLatest {
+                setupStepsView(bind.barChart, it)
+                adapter.setData(it.stepsList)
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
+    private fun setupDate(){
+        selectedDate = Calendar.getInstance()
+        weekAgoDate = Calendar.getInstance()
+        weekAgoDate.add(Calendar.DATE, -7)
+
+        val sdf = SimpleDateFormat("d MMMM")
+
+        bind.dateView.text = "с ${sdf.format(weekAgoDate.time).lowercase()} по ${sdf.format(selectedDate.time).lowercase()}"
+
+        bind.nextDateButton.setOnClickListener {
+            selectedDate.add(Calendar.DATE, 7)
+            weekAgoDate.add(Calendar.DATE, 7)
+            updateStepsToDate()
+            bind.dateView.text = "с ${sdf.format(weekAgoDate.time).lowercase()} по ${sdf.format(selectedDate.time).lowercase()}"
+        }
+
+        bind.previousDateButton.setOnClickListener {
+            selectedDate.add(Calendar.DATE, -7)
+            weekAgoDate.add(Calendar.DATE, -7)
+            updateStepsToDate()
+            bind.dateView.text = "с ${sdf.format(weekAgoDate.time).lowercase()} по ${sdf.format(selectedDate.time).lowercase()}"
+        }
+    }
+
+    private fun updateStepsToDate(){
+        var steps = viewModel.stepsData.value.stepsList.filter { it.date >= weekAgoDate.time && it.date < selectedDate.time}
+        setupStepsView(bind.barChart, StepsModel(steps))
+        adapter.setData(steps)
     }
 
     companion object {
         fun setupStepsView(barChart: BarChart, stepsModel: StepsModel) {
             val dataset = getDataSet(stepsModel)
             val data = BarData(dataset.first)
+            dataset.first.valueTextColor = Color.WHITE
             data.barWidth = 0.5f
             data.setValueTextSize(14f)
             barChart.data = data
@@ -112,11 +147,13 @@ class StepsFragment :
             barChart.extraBottomOffset = 15f
             barChart.xAxis.spaceMin = 0.5f
             barChart.xAxis.spaceMax = 0.5f
+            barChart.xAxis.textColor = Color.WHITE
             barChart.xAxis.setAvoidFirstLastClipping(false)
 
             val formatter: ValueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
-                    return dataset.second[value.toInt()]
+                    if(dataset.second.isEmpty()) return ""
+                    return dataset.second[value.toInt() % dataset.second.size]
                 }
             }
 
@@ -130,13 +167,14 @@ class StepsFragment :
         private fun getDataSet(stepsModel: StepsModel): Pair<IBarDataSet, List<String>> {
             val valueSet = ArrayList<BarEntry>()
             val labels = ArrayList<String>()
-            for (i in 0 until stepsModel.stepsList.size) {
-                valueSet.add(BarEntry(i.toFloat(), stepsModel.stepsList[i].steps.toFloat()))
-                labels.add(SimpleDateFormat("dd/MM").format(stepsModel.stepsList[i].date))
+            val stepsList = stepsModel.stepsList.sortedBy { it.date }
+            for (i in stepsList.indices) {
+                valueSet.add(BarEntry(i.toFloat(), stepsList[i].steps.toFloat()))
+                labels.add(SimpleDateFormat("dd/MM").format(stepsList[i].date))
             }
 
             val barDataSet = BarDataSet(valueSet, "")
-            barDataSet.color = Color.rgb(0, 155, 0)
+            barDataSet.color = Color.parseColor("#5F58CD")
             return Pair(barDataSet, labels)
         }
     }
@@ -163,7 +201,7 @@ class StepsFragment :
         }
 
         val alertDialog = dialog
-            .setTitle("Добавление долга")
+            .setTitle("Добавление шагов")
             .setPositiveButton("Ок") { _, _ -> }
             .setNeutralButton("Отмена") { dialog, _ -> dialog.dismiss() }
             .create()

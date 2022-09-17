@@ -1,17 +1,12 @@
-package ru.andrewkir.servo.flows.aspects.finance.adapters
+package ru.andrewkir.servo.flows.aspects.steps.adapters
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import ru.andrewkir.servo.R
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
 import java.text.SimpleDateFormat
@@ -20,7 +15,7 @@ class StepsAdapter(private var dataSet: List<StepsObject>, private val listener:
     RecyclerView.Adapter<StepsAdapter.ViewHolder>() {
 
     fun setData(data: List<StepsObject>){
-        dataSet = data
+        dataSet = data.sortedBy { it.date }
         notifyDataSetChanged()
     }
 

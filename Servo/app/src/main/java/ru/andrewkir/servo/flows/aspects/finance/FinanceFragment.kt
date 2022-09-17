@@ -2,6 +2,7 @@ package ru.andrewkir.servo.flows.aspects.finance
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +22,6 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.launch
 import ru.andrewkir.servo.App
@@ -54,7 +54,7 @@ class FinanceFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bind.button.setOnClickListener {
+        bind.backButton.setOnClickListener {
             findNavController().navigate(R.id.action_financeFragment_to_dashboardFragment)
         }
 
@@ -64,7 +64,7 @@ class FinanceFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.financeData.collect() {
-                    setupFinanceView(bind.chart, it.financeList)
+                    setupFinanceView(bind.chart, it.financeList, false)
                     adapter.setData(it.financeList)
                 }
             }
@@ -72,7 +72,7 @@ class FinanceFragment :
 
         adapter = FinanceAdapter(emptyList()) {
             viewModel.removeLoan(it)
-            setupFinanceView(bind.chart, viewModel.mFinanceData)
+            setupFinanceView(bind.chart, viewModel.mFinanceData, false)
             adapter.setData(viewModel.mFinanceData)
         }
         bind.recyclerView.adapter = adapter
@@ -81,7 +81,7 @@ class FinanceFragment :
 
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun showDialogNewLoan() {
         val dialog = AlertDialog.Builder(requireContext())
 
@@ -147,14 +147,18 @@ class FinanceFragment :
                     )
                 )
                 adapter.setData(viewModel.mFinanceData)
-                setupFinanceView(bind.chart, viewModel.mFinanceData)
+                setupFinanceView(bind.chart, viewModel.mFinanceData, false)
             }
             if (closeDialog) alertDialog.dismiss()
         }
     }
 
     companion object {
-        fun setupFinanceView(chartView: PieChart, financeObjectList: List<FinanceObject>) {
+        fun setupFinanceView(
+            chartView: PieChart,
+            financeObjectList: List<FinanceObject>,
+            isBackGroundWhite: Boolean
+        ) {
             chartView.let { pieChart ->
                 var sum = 0.0
                 val financeData = mutableMapOf<FinanceCategoryEnum, Float>()
@@ -191,7 +195,13 @@ class FinanceFragment :
                     )
                 }
                 val dataSet = PieDataSet(pieEntires, "")
-                dataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
+                //TODO change color
+                if (!isBackGroundWhite) dataSet.valueTextColor = Color.WHITE
+                dataSet.setColors(
+                    Color.parseColor("#6C64FF"),
+                    Color.parseColor("#5651AB"),
+                    Color.parseColor("#8E8E93")
+                )
                 val data = PieData(dataSet)
                 data.setValueTextSize(0f)
                 //Get the chart
@@ -204,6 +214,11 @@ class FinanceFragment :
                 //pieChart.setMaxHighlightDistance(34);
                 pieChart.setEntryLabelTextSize(12f)
                 pieChart.holeRadius = 75f
+                if (!isBackGroundWhite) {
+                    pieChart.setHoleColor(Color.parseColor("#403D56"))
+                    pieChart.setCenterTextColor(Color.WHITE)
+                    pieChart.setEntryLabelColor(Color.WHITE)
+                }
                 pieChart.animateXY(1000, 1000)
 
                 //legend attributes

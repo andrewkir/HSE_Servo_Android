@@ -23,7 +23,7 @@ class FinanceViewModel @Inject constructor(
         viewModelScope.launch {
             val result = financeRepository.getData()
             mFinanceData = result as MutableList<FinanceObject>
-            _financeData.emit(FinanceModel(mFinanceData))
+            _financeData.value = FinanceModel(mFinanceData)
         }
     }
 

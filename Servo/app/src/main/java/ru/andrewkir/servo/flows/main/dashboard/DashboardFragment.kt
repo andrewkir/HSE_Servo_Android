@@ -34,7 +34,7 @@ class DashboardFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupFinanceView(bind.chart, viewModel.getData())
+        setupFinanceView(bind.chart, viewModel.getData(), true)
 
         bind.financeAspectCardView.setOnClickListener{
             findNavController().navigate(R.id.action_dashboardFragment_to_financeFragment)

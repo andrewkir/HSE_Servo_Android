@@ -51,9 +51,9 @@ class FinanceAdapter(private var dataSet: List<FinanceObject>, private val liste
 
             color.backgroundTintList = ColorStateList.valueOf(
                 when(dataSet[position].category){
-                    FinanceCategoryEnum.BANK_LOAN -> Color.parseColor("#2ecc71")
-                    FinanceCategoryEnum.UNOFFICIAL_LOAN -> Color.parseColor("#f1c40f")
-                    FinanceCategoryEnum.GIVE_LOAN -> Color.parseColor("#e74c3c")
+                    FinanceCategoryEnum.BANK_LOAN -> Color.parseColor("#6C64FF")
+                    FinanceCategoryEnum.UNOFFICIAL_LOAN -> Color.parseColor("#5651AB")
+                    FinanceCategoryEnum.GIVE_LOAN -> Color.parseColor("#8E8E93")
                 }
             )
 

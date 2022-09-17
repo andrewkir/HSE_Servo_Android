@@ -1,7 +1,9 @@
 package ru.andrewkir.servo.flows.aspects.steps
 
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.andrewkir.servo.common.BaseViewModel
@@ -31,8 +33,10 @@ class StepsViewModel @Inject constructor(
 
     fun addSteps(stepsObject: StepsObject){
         viewModelScope.launch {
-            mStepsData.add(stepsObject)
-            _stepsData.value = StepsModel(mStepsData)
+            val items = _stepsData.value.copy().stepsList as MutableList
+            val newItems: MutableList<StepsObject> = items.map { it.copy() } as MutableList<StepsObject>
+            newItems.add(stepsObject)
+            _stepsData.value = _stepsData.value.copy(stepsList = newItems)
         }
     }
 
