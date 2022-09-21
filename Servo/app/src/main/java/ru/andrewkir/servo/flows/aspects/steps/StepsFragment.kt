@@ -75,7 +75,7 @@ class StepsFragment :
 
         lifecycleScope.launchWhenCreated {
             viewModel.stepsData.collectLatest {
-                setupStepsView(bind.barChart, it)
+                updateStepsToDate()
                 adapter.setData(it.stepsList)
             }
         }
@@ -113,10 +113,10 @@ class StepsFragment :
     }
 
     companion object {
-        fun setupStepsView(barChart: BarChart, stepsModel: StepsModel) {
+        fun setupStepsView(barChart: BarChart, stepsModel: StepsModel, isBackGroundWhite: Boolean = false) {
             val dataset = getDataSet(stepsModel)
             val data = BarData(dataset.first)
-            dataset.first.valueTextColor = Color.WHITE
+            if (!isBackGroundWhite) dataset.first.valueTextColor = Color.WHITE
             data.barWidth = 0.5f
             data.setValueTextSize(14f)
             barChart.data = data
@@ -147,7 +147,7 @@ class StepsFragment :
             barChart.extraBottomOffset = 15f
             barChart.xAxis.spaceMin = 0.5f
             barChart.xAxis.spaceMax = 0.5f
-            barChart.xAxis.textColor = Color.WHITE
+            if (!isBackGroundWhite) barChart.xAxis.textColor = Color.WHITE
             barChart.xAxis.setAvoidFirstLastClipping(false)
 
             val formatter: ValueFormatter = object : ValueFormatter() {

@@ -6,18 +6,66 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.databinding.FragmentDashboardBinding
 import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment.Companion.setupFinanceView
+import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
 import ru.andrewkir.servo.flows.aspects.steps.StepsFragment.Companion.setupStepsView
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
-import kotlin.random.Random
+import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter
+import ru.andrewkir.servo.flows.main.dashboard.models.DashboardViews
+import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
+import ru.andrewkir.servo.flows.main.dashboard.models.StepsEntry
 
 
 class DashboardFragment :
     BaseFragment<DashboardViewModel, DashboardRepository, FragmentDashboardBinding>() {
+
+    private lateinit var adapter: DashboardAdapter
+
+    private val itemTouchHelper by lazy {
+        val simpleItemTouchCallback =
+            object : ItemTouchHelper.SimpleCallback(
+                UP or DOWN or START or END, 0
+            ) {
+
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+
+                    val adapter = recyclerView.adapter as DashboardAdapter
+                    val from = viewHolder.adapterPosition
+                    val to = target.adapterPosition
+                    adapter.moveItem(from, to)
+                    adapter.notifyItemMoved(from, to)
+
+                    return true
+                }
+
+                override fun onSwiped(
+                    viewHolder: RecyclerView.ViewHolder,
+                    direction: Int
+                ) {
+                }
+
+                override fun isLongPressDragEnabled(): Boolean {
+                    return true
+                }
+
+                override fun isItemViewSwipeEnabled(): Boolean {
+                    return false
+                }
+            }
+        ItemTouchHelper(simpleItemTouchCallback)
+    }
 
     override fun provideBinding(
         inflater: LayoutInflater,
@@ -26,8 +74,8 @@ class DashboardFragment :
         FragmentDashboardBinding.inflate(inflater, container, false)
 
     override fun provideViewModel(): DashboardViewModel {
-            (requireContext().applicationContext as App).appComponent.inject(this)
-            return ViewModelProvider(this, viewModelFactory)[DashboardViewModel::class.java]
+        (requireContext().applicationContext as App).appComponent.inject(this)
+        return ViewModelProvider(this, viewModelFactory)[DashboardViewModel::class.java]
     }
 
 
@@ -36,14 +84,28 @@ class DashboardFragment :
 
         setupFinanceView(bind.chart, viewModel.getData(), true)
 
-        bind.financeAspectCardView.setOnClickListener{
+        bind.financeAspectCardView.setOnClickListener {
             findNavController().navigate(R.id.action_dashboardFragment_to_financeFragment)
         }
 
-        bind.stepsAspectCardView.setOnClickListener{
+        bind.stepsAspectCardView.setOnClickListener {
             findNavController().navigate(R.id.action_dashboardFragment_to_stepsFragment)
         }
 
-        setupStepsView(bind.stepsBarChart, StepsModel(viewModel.getStepsData()))
+        setupStepsView(bind.stepsBarChart, StepsModel(viewModel.getStepsData()), true)
+
+        adapter = DashboardAdapter {
+            when (it) {
+                DashboardViews.FinanceView -> findNavController().navigate(R.id.action_dashboardFragment_to_financeFragment)
+                DashboardViews.StepsView -> findNavController().navigate(R.id.action_dashboardFragment_to_stepsFragment)
+            }
+        }
+        bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        bind.recyclerView.adapter = adapter
+        adapter.data = mutableListOf(
+            FinanceEntry(FinanceModel(viewModel.getData())),
+            StepsEntry(StepsModel(viewModel.getStepsData()))
+        )
+        itemTouchHelper.attachToRecyclerView(bind.recyclerView)
     }
 }

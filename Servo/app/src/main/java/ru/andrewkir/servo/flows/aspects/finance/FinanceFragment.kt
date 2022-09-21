@@ -195,8 +195,7 @@ class FinanceFragment :
                     )
                 }
                 val dataSet = PieDataSet(pieEntires, "")
-                //TODO change color
-                if (!isBackGroundWhite) dataSet.valueTextColor = Color.WHITE
+                if (!isBackGroundWhite) pieChart.legend.textColor = Color.WHITE
                 dataSet.setColors(
                     Color.parseColor("#6C64FF"),
                     Color.parseColor("#5651AB"),
