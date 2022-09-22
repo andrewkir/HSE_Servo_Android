@@ -12,10 +12,10 @@ data class FinanceModel(
 
 @Parcelize
 data class FinanceObject(
-    var name: String,
-    var sum: Double,
-    var date: Date?,
-    var category: FinanceCategoryEnum
+    var name: String? = null,
+    var sum: Double? = null,
+    var date: Date? = null,
+    var category: FinanceCategoryEnum? = null
 ): Parcelable
 
 enum class FinanceCategoryEnum{

@@ -50,7 +50,7 @@ class FinanceAdapter(private var dataSet: List<FinanceObject>, private val liste
             date.text = SimpleDateFormat("dd.MM.yyyy").format(dataSet[position].date)
 
             color.backgroundTintList = ColorStateList.valueOf(
-                when(dataSet[position].category){
+                when(dataSet[position].category!!){
                     FinanceCategoryEnum.BANK_LOAN -> Color.parseColor("#6C64FF")
                     FinanceCategoryEnum.UNOFFICIAL_LOAN -> Color.parseColor("#5651AB")
                     FinanceCategoryEnum.GIVE_LOAN -> Color.parseColor("#8E8E93")

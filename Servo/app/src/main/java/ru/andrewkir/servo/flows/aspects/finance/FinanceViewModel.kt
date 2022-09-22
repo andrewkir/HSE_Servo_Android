@@ -3,6 +3,7 @@ package ru.andrewkir.servo.flows.aspects.finance
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.andrewkir.servo.common.BaseViewModel
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
@@ -21,9 +22,10 @@ class FinanceViewModel @Inject constructor(
 
     fun getData() {
         viewModelScope.launch {
-            val result = financeRepository.getData()
-            mFinanceData = result as MutableList<FinanceObject>
-            _financeData.value = FinanceModel(mFinanceData)
+            financeRepository.getData().collect{
+                mFinanceData = it.financeList as MutableList<FinanceObject>
+                _financeData.value = FinanceModel(mFinanceData)
+            }
         }
     }
 

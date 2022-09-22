@@ -1,11 +1,16 @@
 package ru.andrewkir.servo.flows.main.dashboard
 
 import android.util.Log
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 //import ru.andrewkir.hse_mooc.network.responses.ApiResponse
 //import ru.andrewkir.hse_mooc.network.responses.Categories.CategoriesResponse
 //import ru.andrewkir.hse_mooc.network.responses.CoursesPreview.CoursePreview
 import ru.andrewkir.servo.common.BaseViewModel
 import ru.andrewkir.servo.flows.aspects.finance.*
+import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
@@ -20,10 +25,26 @@ class DashboardViewModel @Inject constructor(
     private val stepsRepository: StepsRepository
 ) : BaseViewModel(dashboardRepository) {
 
-    fun getData(): List<FinanceObject> = financeRepository.getData()
+    val financeFlow: MutableStateFlow<FinanceModel> by lazy { MutableStateFlow(FinanceModel()) }
+
+    val stepsFlow: MutableStateFlow<StepsModel> by lazy { MutableStateFlow(StepsModel()) }
+
+    fun getData() {
+        viewModelScope.launch {
+            financeRepository.getData().collect{
+                financeFlow.emit(it)
+            }
+        }
+    }
 
 
-    fun getStepsData(): List<StepsObject> = stepsRepository.getData()
+    fun getStepsData() {
+        viewModelScope.launch {
+            stepsRepository.getData().collect{
+                stepsFlow.emit(it)
+            }
+        }
+    }
 
 //
 //    private val mutableCourses = arrayListOf<CoursePreview>()

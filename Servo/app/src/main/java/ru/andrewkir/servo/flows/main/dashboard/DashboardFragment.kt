@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.flow.collectLatest
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
@@ -19,6 +21,8 @@ import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
 import ru.andrewkir.servo.flows.aspects.steps.StepsFragment.Companion.setupStepsView
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter
+import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter.Companion.FINANCE_VIEW
+import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter.Companion.STEPS_VIEW
 import ru.andrewkir.servo.flows.main.dashboard.models.DashboardViews
 import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
 import ru.andrewkir.servo.flows.main.dashboard.models.StepsEntry
@@ -34,7 +38,6 @@ class DashboardFragment :
             object : ItemTouchHelper.SimpleCallback(
                 UP or DOWN or START or END, 0
             ) {
-
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
@@ -82,18 +85,6 @@ class DashboardFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupFinanceView(bind.chart, viewModel.getData(), true)
-
-        bind.financeAspectCardView.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboardFragment_to_financeFragment)
-        }
-
-        bind.stepsAspectCardView.setOnClickListener {
-            findNavController().navigate(R.id.action_dashboardFragment_to_stepsFragment)
-        }
-
-        setupStepsView(bind.stepsBarChart, StepsModel(viewModel.getStepsData()), true)
-
         adapter = DashboardAdapter {
             when (it) {
                 DashboardViews.FinanceView -> findNavController().navigate(R.id.action_dashboardFragment_to_financeFragment)
@@ -103,9 +94,24 @@ class DashboardFragment :
         bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         bind.recyclerView.adapter = adapter
         adapter.data = mutableListOf(
-            FinanceEntry(FinanceModel(viewModel.getData())),
-            StepsEntry(StepsModel(viewModel.getStepsData()))
+            FinanceEntry(FinanceModel()),
+            StepsEntry(StepsModel())
         )
         itemTouchHelper.attachToRecyclerView(bind.recyclerView)
+
+        lifecycleScope.launchWhenResumed {
+            viewModel.financeFlow.collect {
+                adapter.updateItem(FINANCE_VIEW, it.financeList)
+            }
+        }
+
+        lifecycleScope.launchWhenResumed {
+            viewModel.stepsFlow.collect {
+                adapter.updateItem(STEPS_VIEW, it.stepsList)
+            }
+        }
+
+        viewModel.getData()
+        viewModel.getStepsData()
     }
 }

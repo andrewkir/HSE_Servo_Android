@@ -25,9 +25,10 @@ class StepsViewModel @Inject constructor(
 
     fun getData() {
         viewModelScope.launch {
-            val result = stepsRepository.getData()
-            mStepsData = result as MutableList<StepsObject>
-            _stepsData.emit(StepsModel(mStepsData))
+            stepsRepository.getData().collect{
+                mStepsData = it.stepsList as MutableList<StepsObject>
+                _stepsData.value = StepsModel(mStepsData)
+            }
         }
     }
 

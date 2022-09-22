@@ -165,12 +165,12 @@ class FinanceFragment :
 
                 for (obj in financeObjectList) {
                     if (obj.category in financeData.keys) {
-                        financeData[obj.category] =
-                            financeData[obj.category]?.plus(obj.sum.toFloat()) ?: 0f
+                        financeData[obj.category!!] =
+                            financeData[obj.category]?.plus(obj.sum!!.toFloat()) ?: 0f
                     } else {
-                        financeData[obj.category] = obj.sum.toFloat()
+                        financeData[obj.category!!] = obj.sum!!.toFloat()
                     }
-                    sum += obj.sum
+                    sum += obj.sum!!
                 }
 
                 val pieEntires: MutableList<PieEntry> = ArrayList()

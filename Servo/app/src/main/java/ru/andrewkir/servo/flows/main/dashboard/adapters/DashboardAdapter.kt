@@ -11,7 +11,11 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment.Companion.setupFinanceView
+import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
+import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.StepsFragment.Companion.setupStepsView
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
 import ru.andrewkir.servo.flows.main.dashboard.models.DashboardModel
 import ru.andrewkir.servo.flows.main.dashboard.models.DashboardViews
 import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
@@ -25,6 +29,21 @@ class DashboardAdapter(
     companion object {
         const val FINANCE_VIEW = 0
         const val STEPS_VIEW = 1
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun updateItem(viewType: Int, data: List<*>){
+        if (this.data.isEmpty()) return
+        when(viewType){
+            FINANCE_VIEW -> {
+                (this.data.firstOrNull { it.type == DashboardViews.FinanceView } as FinanceEntry)
+                    .data = FinanceModel(data as List<FinanceObject>)
+            }
+            STEPS_VIEW -> {
+                (this.data.firstOrNull { it.type == DashboardViews.StepsView } as StepsEntry)
+                    .data = StepsModel(data as List<StepsObject>)
+            }
+        }
     }
 
     var data: MutableList<DashboardModel> = mutableListOf()
