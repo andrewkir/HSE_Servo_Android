@@ -2,6 +2,8 @@ package ru.andrewkir.servo.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import ru.andrewkir.servo.flows.aspects.emotions.EmotionsRepository
+import ru.andrewkir.servo.flows.aspects.emotions.EmotionsViewModel
 import ru.andrewkir.servo.flows.aspects.finance.FinanceRepository
 import ru.andrewkir.servo.flows.aspects.finance.FinanceViewModel
 import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
@@ -19,7 +21,8 @@ class ViewModelFactory @Inject constructor(
     val dashboardRepository: DashboardRepository,
     val profileRepository: ProfileRepository,
     val financeRepository: FinanceRepository,
-    val stepsRepository: StepsRepository
+    val stepsRepository: StepsRepository,
+    val emotionsRepository: EmotionsRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
@@ -30,6 +33,7 @@ class ViewModelFactory @Inject constructor(
             modelClass.isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(dashboardRepository, financeRepository, stepsRepository) as T
             modelClass.isAssignableFrom(FinanceViewModel::class.java) -> FinanceViewModel(financeRepository) as T
             modelClass.isAssignableFrom(StepsViewModel::class.java) -> StepsViewModel(stepsRepository) as T
+            modelClass.isAssignableFrom(EmotionsViewModel::class.java) -> EmotionsViewModel(emotionsRepository) as T
             else -> throw IllegalArgumentException("Provide correct viewModel class")
         }
     }

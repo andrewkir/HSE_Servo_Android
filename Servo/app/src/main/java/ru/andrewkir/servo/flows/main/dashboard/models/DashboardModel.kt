@@ -7,5 +7,6 @@ interface DashboardModel {
 
 enum class DashboardViews{
     FinanceView,
-    StepsView
+    StepsView,
+    EmotionsView
 }

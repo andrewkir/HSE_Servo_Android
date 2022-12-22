@@ -87,16 +87,13 @@ class DashboardFragment :
 
         adapter = DashboardAdapter {
             when (it) {
-                DashboardViews.FinanceView -> findNavController().navigate(R.id.action_dashboardFragment_to_financeFragment)
-                DashboardViews.StepsView -> findNavController().navigate(R.id.action_dashboardFragment_to_stepsFragment)
+                DashboardViews.FinanceView -> findNavController().navigate(R.id.action_dashboardFragment_to_emotionsFragment)
+                DashboardViews.StepsView -> findNavController().navigate(R.id.action_dashboardFragment_to_emotionsFragment)
             }
         }
         bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         bind.recyclerView.adapter = adapter
-        adapter.data = mutableListOf(
-            FinanceEntry(FinanceModel()),
-            StepsEntry(StepsModel())
-        )
+        adapter.data = viewModel.getCardData()
         itemTouchHelper.attachToRecyclerView(bind.recyclerView)
 
         lifecycleScope.launchWhenResumed {
@@ -113,5 +110,10 @@ class DashboardFragment :
 
         viewModel.getData()
         viewModel.getStepsData()
+    }
+
+    override fun onDestroyView() {
+        viewModel.saveCardData(adapter.data)
+        super.onDestroyView()
     }
 }

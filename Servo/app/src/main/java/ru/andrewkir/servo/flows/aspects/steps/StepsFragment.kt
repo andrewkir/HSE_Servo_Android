@@ -57,7 +57,7 @@ class StepsFragment :
         super.onViewCreated(view, savedInstanceState)
 
         bind.backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_stepsFragment_to_dashboardFragment)
+            requireActivity().onBackPressed()
         }
 
         bind.newButton.setOnClickListener {

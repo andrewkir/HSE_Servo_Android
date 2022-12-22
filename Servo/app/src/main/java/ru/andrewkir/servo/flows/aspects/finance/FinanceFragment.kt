@@ -55,7 +55,7 @@ class FinanceFragment :
         super.onViewCreated(view, savedInstanceState)
 
         bind.backButton.setOnClickListener {
-            findNavController().navigate(R.id.action_financeFragment_to_dashboardFragment)
+            requireActivity().onBackPressed()
         }
 
         bind.newButton.setOnClickListener {

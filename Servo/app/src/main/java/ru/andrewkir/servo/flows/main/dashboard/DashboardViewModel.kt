@@ -1,21 +1,20 @@
 package ru.andrewkir.servo.flows.main.dashboard
 
-import android.util.Log
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 //import ru.andrewkir.hse_mooc.network.responses.ApiResponse
 //import ru.andrewkir.hse_mooc.network.responses.Categories.CategoriesResponse
 //import ru.andrewkir.hse_mooc.network.responses.CoursesPreview.CoursePreview
+import android.util.Log
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import ru.andrewkir.servo.common.BaseViewModel
-import ru.andrewkir.servo.flows.aspects.finance.*
+import ru.andrewkir.servo.flows.aspects.finance.FinanceRepository
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
-import java.util.*
+import ru.andrewkir.servo.flows.main.dashboard.models.DashboardModel
+import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
+import ru.andrewkir.servo.flows.main.dashboard.models.StepsEntry
 import javax.inject.Inject
 
 
@@ -29,9 +28,14 @@ class DashboardViewModel @Inject constructor(
 
     val stepsFlow: MutableStateFlow<StepsModel> by lazy { MutableStateFlow(StepsModel()) }
 
+    private var cardsData = mutableListOf(
+        FinanceEntry(FinanceModel()),
+        StepsEntry(StepsModel())
+    )
+
     fun getData() {
         viewModelScope.launch {
-            financeRepository.getData().collect{
+            financeRepository.getData().collect {
                 financeFlow.emit(it)
             }
         }
@@ -40,13 +44,21 @@ class DashboardViewModel @Inject constructor(
 
     fun getStepsData() {
         viewModelScope.launch {
-            stepsRepository.getData().collect{
+            stepsRepository.getData().collect {
                 stepsFlow.emit(it)
             }
         }
     }
 
-//
+    fun getCardData(): MutableList<DashboardModel> {
+        return cardsData
+    }
+
+    fun saveCardData(cardData: MutableList<DashboardModel>){
+        cardsData = cardData
+    }
+
+    //
 //    private val mutableCourses = arrayListOf<CoursePreview>()
 //    private val mutableCoursesLiveData: MutableLiveData<List<CoursePreview>> = MutableLiveData()
 //    val coursesLiveData: LiveData<List<CoursePreview>>
@@ -63,7 +75,7 @@ class DashboardViewModel @Inject constructor(
 //    val categoryResponse: MutableLiveData<ApiResponse<CategoriesResponse>> = MutableLiveData()
 //
     init {
-        Log.d("VIEWMODEL","INIT viewmodel")
+        Log.d("VIEWMODEL", "INIT viewmodel")
     }
 //
 //    private var page = 1

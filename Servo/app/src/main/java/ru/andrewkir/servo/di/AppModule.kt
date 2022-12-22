@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.andrewkir.servo.common.ViewModelFactory
+import ru.andrewkir.servo.flows.aspects.emotions.EmotionsRepository
 import ru.andrewkir.servo.flows.aspects.finance.FinanceRepository
 import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
 import ru.andrewkir.servo.flows.auth.AuthRepository
@@ -21,14 +22,16 @@ class AppModule(val context: Context) {
         dashboardRepository: DashboardRepository,
         profileRepository: ProfileRepository,
         financeRepository: FinanceRepository,
-        stepsRepository: StepsRepository
+        stepsRepository: StepsRepository,
+        emotionsRepository: EmotionsRepository
     ): ViewModelFactory {
         return ViewModelFactory(
             authRepository,
             dashboardRepository,
             profileRepository,
             financeRepository,
-            stepsRepository
+            stepsRepository,
+            emotionsRepository
         )
     }
 }

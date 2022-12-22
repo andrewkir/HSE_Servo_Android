@@ -18,25 +18,22 @@
             app:destination="@id/stepsFragment"
             app:enterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_emotionsFragment"
+            app:destination="@id/emotionsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/financeFragment"
         android:name="ru.andrewkir.servo.flows.aspects.finance.FinanceFragment"
-        android:label="FinanceFragment">
-        <action
-            android:id="@+id/action_financeFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
-    </fragment>
+        android:label="FinanceFragment" />
     <fragment
         android:id="@+id/stepsFragment"
         android:name="ru.andrewkir.servo.flows.aspects.steps.StepsFragment"
-        android:label="StepsFragment">
-        <action
-            android:id="@+id/action_stepsFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
-    </fragment>
+        android:label="StepsFragment" />
+    <fragment
+        android:id="@+id/emotionsFragment"
+        android:name="ru.andrewkir.servo.flows.aspects.emotions.EmotionsFragment"
+        android:label="EmotionsFragment" />
 </navigation>

@@ -3,6 +3,7 @@ package ru.andrewkir.servo.di
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import ru.andrewkir.servo.flows.aspects.emotions.EmotionsRepository
 import ru.andrewkir.servo.flows.aspects.finance.FinanceRepository
 import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
 import ru.andrewkir.servo.flows.auth.AuthRepository
@@ -22,4 +23,6 @@ class DataModule {
     fun provideDashBoardRepository(): DashboardRepository = DashboardRepository()
     @Provides
     fun provideStepsRepository(): StepsRepository = StepsRepository()
+    @Provides
+    fun provideEmotionsRepository(): EmotionsRepository = EmotionsRepository()
 }

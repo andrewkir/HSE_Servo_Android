@@ -5,6 +5,7 @@ import dagger.Component
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.common.BaseRepository
 import ru.andrewkir.servo.common.BaseViewModel
+import ru.andrewkir.servo.flows.aspects.emotions.EmotionsFragment
 import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment
 import ru.andrewkir.servo.flows.aspects.steps.StepsFragment
 import ru.andrewkir.servo.flows.auth.AuthFragment
@@ -20,4 +21,5 @@ interface AppComponent {
     fun inject(profileFragment: ProfileFragment)
     fun inject(loginFragment: LoginFragment)
     fun inject(stepsFragment: StepsFragment)
+    fun inject(emotionsFragment: EmotionsFragment)
 }

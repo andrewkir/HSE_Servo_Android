@@ -29,6 +29,7 @@ class DashboardAdapter(
     companion object {
         const val FINANCE_VIEW = 0
         const val STEPS_VIEW = 1
+        const val EMOTIONS_VIEW = 2
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -69,6 +70,7 @@ class DashboardAdapter(
         return when (data[position].type) {
             DashboardViews.FinanceView -> FINANCE_VIEW
             DashboardViews.StepsView -> STEPS_VIEW
+            DashboardViews.EmotionsView -> EMOTIONS_VIEW
         }
     }
 
@@ -78,7 +80,7 @@ class DashboardAdapter(
             FINANCE_VIEW -> {
                 (viewHolder as FinanceViewHolder).title?.text = data[position].title
 
-                viewHolder.card?.setOnClickListener { onItemClick?.invoke(data[position].type) }
+                viewHolder.card?.setOnClickListener { onItemClick?.invoke(DashboardViews.FinanceView) }
 
                 setupFinanceView(
                     viewHolder.chart!!,
@@ -90,7 +92,7 @@ class DashboardAdapter(
             STEPS_VIEW -> {
                 (viewHolder as StepsViewHolder).title?.text = data[position].title
 
-                viewHolder.card?.setOnClickListener { onItemClick?.invoke(data[position].type) }
+                viewHolder.card?.setOnClickListener { onItemClick?.invoke(DashboardViews.StepsView) }
 
                 setupStepsView(
                     viewHolder.chart!!,
