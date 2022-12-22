@@ -30,7 +30,7 @@ class ViewModelFactory @Inject constructor(
         return when {
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(authRepository) as T
             modelClass.isAssignableFrom(ProfileViewModel::class.java) -> ProfileViewModel(profileRepository) as T
-            modelClass.isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(dashboardRepository, financeRepository, stepsRepository) as T
+            modelClass.isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(dashboardRepository, financeRepository, stepsRepository, emotionsRepository) as T
             modelClass.isAssignableFrom(FinanceViewModel::class.java) -> FinanceViewModel(financeRepository) as T
             modelClass.isAssignableFrom(StepsViewModel::class.java) -> StepsViewModel(stepsRepository) as T
             modelClass.isAssignableFrom(EmotionsViewModel::class.java) -> EmotionsViewModel(emotionsRepository) as T

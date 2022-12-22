@@ -10,16 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import ru.andrewkir.servo.R
+import ru.andrewkir.servo.flows.aspects.emotions.EmotionsFragment.Companion.setupEmotionsView
+import ru.andrewkir.servo.flows.aspects.emotions.models.EmotionsModel
 import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment.Companion.setupFinanceView
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.StepsFragment.Companion.setupStepsView
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
-import ru.andrewkir.servo.flows.main.dashboard.models.DashboardModel
-import ru.andrewkir.servo.flows.main.dashboard.models.DashboardViews
-import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
-import ru.andrewkir.servo.flows.main.dashboard.models.StepsEntry
+import ru.andrewkir.servo.flows.main.dashboard.models.*
 
 class DashboardAdapter(
     private val onItemClick: ((DashboardViews) -> Unit)? = null
@@ -33,9 +32,9 @@ class DashboardAdapter(
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun updateItem(viewType: Int, data: List<*>){
+    fun updateItem(viewType: Int, data: List<*>) {
         if (this.data.isEmpty()) return
-        when(viewType){
+        when (viewType) {
             FINANCE_VIEW -> {
                 (this.data.firstOrNull { it.type == DashboardViews.FinanceView } as FinanceEntry)
                     .data = FinanceModel(data as List<FinanceObject>)
@@ -43,6 +42,10 @@ class DashboardAdapter(
             STEPS_VIEW -> {
                 (this.data.firstOrNull { it.type == DashboardViews.StepsView } as StepsEntry)
                     .data = StepsModel(data as List<StepsObject>)
+            }
+            EMOTIONS_VIEW -> {
+                (this.data.firstOrNull { it.type == DashboardViews.EmotionsView } as EmotionsEntry)
+                    .data = data as List<EmotionsModel>
             }
         }
     }
@@ -59,9 +62,13 @@ class DashboardAdapter(
                 LayoutInflater.from(viewGroup.context)
                     .inflate(R.layout.finance_view_row, viewGroup, false)
             )
-            else -> StepsViewHolder(
+            STEPS_VIEW -> StepsViewHolder(
                 LayoutInflater.from(viewGroup.context)
                     .inflate(R.layout.steps_view_row, viewGroup, false)
+            )
+            else -> EmotionsViewHolder(
+                LayoutInflater.from(viewGroup.context)
+                    .inflate(R.layout.emotions_view_row, viewGroup, false)
             )
         }
     }
@@ -101,6 +108,16 @@ class DashboardAdapter(
                     true
                 )
             }
+            EMOTIONS_VIEW -> {
+                (viewHolder as EmotionsViewHolder).title?.text = data[position].title
+
+                viewHolder.card?.setOnClickListener { onItemClick?.invoke(DashboardViews.EmotionsView) }
+
+                setupEmotionsView(
+                    (data[position] as EmotionsEntry).data!!,
+                    true
+                )
+            }
         }
     }
 
@@ -124,6 +141,16 @@ class DashboardAdapter(
         init {
             title = view.findViewById(R.id.stepsTitleText)
             chart = view.findViewById(R.id.stepsBarChart)
+            card = view.findViewById(R.id.stepsAspectCardView)
+        }
+    }
+
+    inner class EmotionsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var title: TextView? = null
+        var card: CardView? = null
+
+        init {
+            title = view.findViewById(R.id.stepsTitleText)
             card = view.findViewById(R.id.stepsAspectCardView)
         }
     }

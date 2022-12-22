@@ -8,11 +8,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ru.andrewkir.servo.common.BaseViewModel
+import ru.andrewkir.servo.flows.aspects.emotions.EmotionsRepository
+import ru.andrewkir.servo.flows.aspects.emotions.models.Emotions
+import ru.andrewkir.servo.flows.aspects.emotions.models.EmotionsModel
 import ru.andrewkir.servo.flows.aspects.finance.FinanceRepository
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
 import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import ru.andrewkir.servo.flows.main.dashboard.models.DashboardModel
+import ru.andrewkir.servo.flows.main.dashboard.models.EmotionsEntry
 import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
 import ru.andrewkir.servo.flows.main.dashboard.models.StepsEntry
 import javax.inject.Inject
@@ -21,16 +25,29 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     val dashboardRepository: DashboardRepository,
     private val financeRepository: FinanceRepository,
-    private val stepsRepository: StepsRepository
+    private val stepsRepository: StepsRepository,
+    private val emotionsRepository: EmotionsRepository
 ) : BaseViewModel(dashboardRepository) {
 
     val financeFlow: MutableStateFlow<FinanceModel> by lazy { MutableStateFlow(FinanceModel()) }
 
     val stepsFlow: MutableStateFlow<StepsModel> by lazy { MutableStateFlow(StepsModel()) }
 
+    val emotionsFlow: MutableStateFlow<List<EmotionsModel>> by lazy {
+        MutableStateFlow(
+            listOf(
+                EmotionsModel(
+                    Emotions.HAPPY,
+                    ""
+                )
+            )
+        )
+    }
+
     private var cardsData = mutableListOf(
         FinanceEntry(FinanceModel()),
-        StepsEntry(StepsModel())
+        StepsEntry(StepsModel()),
+        EmotionsEntry(listOf(EmotionsModel(Emotions.HAPPY, "")))
     )
 
     fun getData() {
@@ -50,11 +67,19 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
+    fun getEmotionsData() {
+        viewModelScope.launch {
+            emotionsRepository.getData().collect {
+                emotionsFlow.emit(it)
+            }
+        }
+    }
+
     fun getCardData(): MutableList<DashboardModel> {
         return cardsData
     }
 
-    fun saveCardData(cardData: MutableList<DashboardModel>){
+    fun saveCardData(cardData: MutableList<DashboardModel>) {
         cardsData = cardData
     }
 
