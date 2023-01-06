@@ -10,6 +10,7 @@ import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
 import ru.andrewkir.servo.flows.aspects.steps.StepsViewModel
 import ru.andrewkir.servo.flows.auth.login.LoginViewModel
 import ru.andrewkir.servo.flows.auth.AuthRepository
+import ru.andrewkir.servo.flows.auth.register.RegisterViewModel
 import ru.andrewkir.servo.flows.main.dashboard.DashboardRepository
 import ru.andrewkir.servo.flows.main.dashboard.DashboardViewModel
 import ru.andrewkir.servo.flows.main.profile.ProfileRepository
@@ -34,6 +35,7 @@ class ViewModelFactory @Inject constructor(
             modelClass.isAssignableFrom(FinanceViewModel::class.java) -> FinanceViewModel(financeRepository) as T
             modelClass.isAssignableFrom(StepsViewModel::class.java) -> StepsViewModel(stepsRepository) as T
             modelClass.isAssignableFrom(EmotionsViewModel::class.java) -> EmotionsViewModel(emotionsRepository) as T
+            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> RegisterViewModel(authRepository) as T
             else -> throw IllegalArgumentException("Provide correct viewModel class")
         }
     }

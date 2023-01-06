@@ -1,4 +1,4 @@
-package ru.andrewkir.servo.flows.auth.login
+package ru.andrewkir.servo.flows.auth.register
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +10,7 @@ import ru.andrewkir.servo.common.BaseViewModel
 import ru.andrewkir.servo.flows.auth.AuthRepository
 import ru.andrewkir.servo.network.common.ApiResponse
 
-class LoginViewModel(
+class RegisterViewModel(
     private val repo: AuthRepository
 ) : BaseViewModel(repo) {
 
@@ -18,27 +18,12 @@ class LoginViewModel(
         MutableLiveData()
 
     val loginResponse: LiveData<SigninUserMutation.Data>
-        get() = mutableLoginResponse
+    get() = mutableLoginResponse
 
-    fun loginByUsername(username: String, password: String) {
+    fun register(username: String, password: String) {
         viewModelScope.launch {
             mutableLoading.value = true
-            when(val result = repo.loginByUsername(Optional.present(username), password)){
-                is ApiResponse.OnSuccessResponse -> {
-                    mutableLoginResponse.value = result.value.data!!
-                }
-                is ApiResponse.OnErrorResponse -> {
-                    errorResponse.value = result
-                }
-        }
-            mutableLoading.value = false
-        }
-    }
-
-    fun loginByEmail(email: String, password: String) {
-        viewModelScope.launch {
-            mutableLoading.value = true
-            when(val result = repo.loginByEmail(Optional.present(email), password)){
+            when(val result = repo.loginByEmail(Optional.present(username), password)){
                 is ApiResponse.OnSuccessResponse -> {
                     mutableLoginResponse.value = result.value.data!!
                 }

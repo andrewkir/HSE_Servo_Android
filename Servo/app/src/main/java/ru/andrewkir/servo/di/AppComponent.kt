@@ -10,6 +10,7 @@ import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment
 import ru.andrewkir.servo.flows.aspects.steps.StepsFragment
 import ru.andrewkir.servo.flows.auth.AuthFragment
 import ru.andrewkir.servo.flows.auth.login.LoginFragment
+import ru.andrewkir.servo.flows.auth.register.RegisterFragment
 import ru.andrewkir.servo.flows.main.dashboard.DashboardFragment
 import ru.andrewkir.servo.flows.main.profile.ProfileFragment
 
@@ -20,6 +21,7 @@ interface AppComponent {
     fun inject(financeFragment: FinanceFragment)
     fun inject(profileFragment: ProfileFragment)
     fun inject(loginFragment: LoginFragment)
+    fun inject(registerFragment: RegisterFragment)
     fun inject(stepsFragment: StepsFragment)
     fun inject(emotionsFragment: EmotionsFragment)
 }
