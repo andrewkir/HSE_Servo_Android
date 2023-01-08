@@ -21,6 +21,7 @@ import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
 import ru.andrewkir.servo.flows.aspects.steps.StepsFragment.Companion.setupStepsView
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter
+import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter.Companion.EMOTIONS_VIEW
 import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter.Companion.FINANCE_VIEW
 import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter.Companion.STEPS_VIEW
 import ru.andrewkir.servo.flows.main.dashboard.models.DashboardViews
@@ -87,8 +88,9 @@ class DashboardFragment :
 
         adapter = DashboardAdapter {
             when (it) {
-                DashboardViews.FinanceView -> findNavController().navigate(R.id.action_dashboardFragment_to_emotionsFragment)
-                DashboardViews.StepsView -> findNavController().navigate(R.id.action_dashboardFragment_to_emotionsFragment)
+                DashboardViews.FinanceView -> findNavController().navigate(R.id.action_dashboardFragment_to_financeFragment)
+                DashboardViews.StepsView -> findNavController().navigate(R.id.action_dashboardFragment_to_stepsFragment)
+                DashboardViews.EmotionsView -> findNavController().navigate(R.id.action_dashboardFragment_to_emotionsFragment)
             }
         }
         bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -105,6 +107,12 @@ class DashboardFragment :
         lifecycleScope.launchWhenResumed {
             viewModel.stepsFlow.collect {
                 adapter.updateItem(STEPS_VIEW, it.stepsList)
+            }
+        }
+
+        lifecycleScope.launchWhenResumed {
+            viewModel.emotionsFlow.collect {
+                adapter.updateItem(EMOTIONS_VIEW, it)
             }
         }
 

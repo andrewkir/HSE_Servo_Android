@@ -11,6 +11,7 @@ import com.apollographql.apollo3.network.http.LoggingInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import ru.andrewkir.servo.BuildConfig
+import ru.andrewkir.servo.common.UserPrefsManager
 import java.util.concurrent.TimeUnit
 
 open class BaseApolloClient {
@@ -19,7 +20,7 @@ open class BaseApolloClient {
             .Builder()
             .serverUrl(BASE_URL)
             .addHttpInterceptor(LoggingInterceptor { str: String -> Log.d("APOLLO", str) })
-            .addHttpInterceptor(AuthorizationInterceptor("PLACE TOKEN HERE"))
+            .addHttpInterceptor(AuthorizationInterceptor(UserPrefsManager(context).accessToken ?: ""))
             .build()
 
     class AuthorizationInterceptor(val token: String) : HttpInterceptor {
@@ -62,11 +63,11 @@ open class BaseApolloClient {
                 )
             }
             .also { client ->
-//                if (BuildConfig.DEBUG) {
-//                    val logging = HttpLoggingInterceptor()
-//                    logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-//                    client.addInterceptor(logging)
-//                }
+                if (BuildConfig.DEBUG) {
+                    val logging = HttpLoggingInterceptor()
+                    logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+                    client.addInterceptor(logging)
+                }
                 if (authenticator != null) {
                     client.authenticator(authenticator)
                 }

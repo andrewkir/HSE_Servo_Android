@@ -12,6 +12,7 @@ import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
+import java.util.Date
 import javax.inject.Inject
 
 class StepsViewModel @Inject constructor(
@@ -38,6 +39,7 @@ class StepsViewModel @Inject constructor(
             val newItems: MutableList<StepsObject> = items.map { it.copy() } as MutableList<StepsObject>
             newItems.add(stepsObject)
             _stepsData.value = _stepsData.value.copy(stepsList = newItems)
+            stepsRepository.addSteps(stepsObject)
         }
     }
 

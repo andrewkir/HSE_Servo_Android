@@ -2,6 +2,7 @@ package ru.andrewkir.servo.flows.aspects.emotions
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.graphics.Color
 import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +15,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.chip.Chip
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
@@ -144,6 +150,15 @@ class EmotionsFragment :
                 closeDialog = true
             }
             if (closeDialog) alertDialog.dismiss()
+        }
+    }
+
+    companion object {
+        fun setupEmotionsView(
+            emmotionsList: List<EmotionsModel>,
+            isBackGroundWhite: Boolean
+        ) {
+
         }
     }
 }

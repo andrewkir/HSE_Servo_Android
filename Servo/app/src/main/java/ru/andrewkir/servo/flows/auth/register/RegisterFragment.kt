@@ -1,6 +1,5 @@
-package ru.andrewkir.servo.flows.auth.login
+package ru.andrewkir.servo.flows.auth.register
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,25 +12,23 @@ import androidx.navigation.Navigation
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
-import ru.andrewkir.servo.common.UserPrefsManager
 import ru.andrewkir.servo.databinding.FragmentLoginBinding
+import ru.andrewkir.servo.databinding.FragmentRegisterBinding
 import ru.andrewkir.servo.flows.aspects.finance.FinanceViewModel
-import ru.andrewkir.servo.flows.auth.AuthActivity
 import ru.andrewkir.servo.flows.auth.AuthRepository
-import ru.andrewkir.servo.flows.main.MainScreenActivity
 import ru.andrewkir.servo.network.ApolloProvider
 
-class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLoginBinding>() {
+class RegisterFragment : BaseFragment<RegisterViewModel, AuthRepository, FragmentRegisterBinding>() {
 
-    override fun provideViewModel(): LoginViewModel {
+    override fun provideViewModel(): RegisterViewModel {
         (requireContext().applicationContext as App).appComponent.inject(this)
-        return ViewModelProvider(this, viewModelFactory)[LoginViewModel::class.java]
+        return ViewModelProvider(this, viewModelFactory)[RegisterViewModel::class.java]
     }
 
     override fun provideBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentLoginBinding = FragmentLoginBinding.inflate(inflater, container, false)
+    ): FragmentRegisterBinding = FragmentRegisterBinding.inflate(inflater, container, false)
 
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -75,7 +72,7 @@ class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLogin
 
     private fun adjustButtonToText() {
         bind.apply {
-            loginButton.isEnabled = loginTextInput.editText!!.text.isNotBlank() &&
+            registerButton.isEnabled = loginTextInput.editText!!.text.isNotBlank() &&
                     passwordTextInput.editText!!.text.isNotBlank()
         }
     }
@@ -88,31 +85,21 @@ class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLogin
     }
 
     private fun setupButtons() {
-        bind.loginButton.setOnClickListener {
+        bind.registerButton.setOnClickListener {
             val login = bind.loginTextInput.editText?.text.toString()
             val password = bind.passwordTextInput.editText?.text.toString()
 
-            if (android.util.Patterns.EMAIL_ADDRESS.matcher(login).matches()) {
-                viewModel.loginByEmail(login, password)
-            } else {
-                viewModel.loginByUsername(login, password)
-            }
+            viewModel.register(login, password)
         }
 
-        bind.registerTextView.setOnClickListener {
-            Navigation.findNavController(bind.root).navigate(R.id.action_loginFragment_to_registerFragment)
+        bind.loginTextView.setOnClickListener {
+            Navigation.findNavController(bind.root).navigate(R.id.action_registerFragment_to_loginFragment)
         }
     }
 
     private fun subscribeToLoginResult() {
         viewModel.loginResponse.observe(viewLifecycleOwner) {
-            val userPrefsManager = UserPrefsManager(requireContext())
 
-            userPrefsManager.accessToken = it.signinUser.session.accessToken
-            userPrefsManager.refreshToken = it.signinUser.session.refreshToken
-
-            startActivity(Intent(requireContext(), MainScreenActivity::class.java))
-            activity?.finish()
         }
     }
 
@@ -134,9 +121,9 @@ class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLogin
     }
 
     private fun enableInputsAndButtons(isEnabled: Boolean) {
-        bind.loginButton.isEnabled = isEnabled
+        bind.registerButton.isEnabled = isEnabled
         bind.loginTextInput.isEnabled = isEnabled
         bind.passwordTextInput.isEnabled = isEnabled
-        bind.registerTextView.isEnabled = isEnabled
+        bind.loginTextView.isEnabled = isEnabled
     }
 }

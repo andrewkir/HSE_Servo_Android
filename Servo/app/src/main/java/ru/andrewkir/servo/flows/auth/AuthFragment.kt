@@ -21,6 +21,9 @@ class AuthFragment : Fragment() {
             Navigation.findNavController(binding.root).navigate(R.id.auth_to_login)
         }
 
+        binding.createAccountButton.setOnClickListener {
+            Navigation.findNavController(binding.root).navigate(R.id.action_authFragment_to_loginFragment2)
+        }
 
         return binding.root
     }

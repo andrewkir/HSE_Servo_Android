@@ -107,7 +107,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="string/login_email_input"
+                    android:hint="Логин или Email"
                     android:inputType="textPersonName|textEmailAddress"
                     android:singleLine="false" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -129,7 +129,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="string/login_password_input"
+                    android:hint="пароль"
                     android:inputType="textPassword"
                     android:singleLine="false" />
 
@@ -176,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:fontFamily="@font/roboto_light"
-                android:text="string/auth_i_dont_have_an_account"
+                android:text="У меня еще нет аккаунта"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="14sp"

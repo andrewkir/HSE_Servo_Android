@@ -97,7 +97,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="string/register_email_input"
+                    android:hint="Email"
                     android:inputType="textPersonName"
                     android:singleLine="false" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -118,7 +118,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="string/register_login_input"
+                    android:hint="Логин"
                     android:inputType="textPersonName"
                     android:singleLine="false" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -140,7 +140,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="string/register_password_input"
+                    android:hint="Пароль"
                     android:inputType="textPassword"
                     android:singleLine="false" />
 
@@ -171,7 +171,7 @@
                 android:paddingTop="20dp"
                 android:paddingRight="60dp"
                 android:paddingBottom="20dp"
-                android:text="string/register_button"
+                android:text="Регистрация"
                 android:textSize="18sp"
                 app:cornerRadius="15dp"
                 app:layout_constraintBottom_toTopOf="@+id/loginTextView"
@@ -186,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:fontFamily="@font/roboto_light"
-                android:text="string/auth_i_already_have_an_account"
+                android:text="У меня уже есть аккаунт"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="14sp"
@@ -211,7 +211,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="string/register_second_password_input"
+                    android:hint="Повторите пароль"
                     android:inputType="textPassword"
                     android:singleLine="false" />
 

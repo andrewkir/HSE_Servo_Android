@@ -2,29 +2,36 @@ package ru.andrewkir.servo.flows.auth
 
 import ru.andrewkir.servo.common.BaseRepository
 import ru.andrewkir.servo.network.ApolloProvider
-import ru.andrewkir.type.UserCreateInput
+import ru.andrewkir.type.UserSigninInput
+import java.util.Optional
 
 class AuthRepository(
     private val api: ApolloProvider
 ) : BaseRepository() {
 
     suspend fun loginByEmail(
-        email: String,
+        email: com.apollographql.apollo3.api.Optional<String>,
         password: String
-    ) = protectedApiCall(api.signUpUser(UserCreateInput(
-        email = email,
-        username = email,
-        password = password,
-        firstName = email,
-        lastName = email
-    )))
-//
-//    suspend fun loginByUsername(
-//        username: String,
-//        password: String
-//    ) = protectedApiCall {
-//        api.getCharacters(0)
-//    }
+    ) = protectedApiCall(
+        api.signInUser(
+            UserSigninInput(
+                email = email,
+                password = password
+            )
+        )
+    )
+
+    suspend fun loginByUsername(
+        username: com.apollographql.apollo3.api.Optional<String>,
+        password: String
+    ) = protectedApiCall(
+        api.signInUser(
+            UserSigninInput(
+                username = username,
+                password = password
+            )
+        )
+    )
 //
 //    suspend fun register(
 //        email: String,

@@ -1,0 +1,8 @@
+mutation SigninUser($data: UserSigninInput!) {
+    signinUser(data: $data) {
+        session {
+            accessToken
+            refreshToken
+        }
+    }
+}

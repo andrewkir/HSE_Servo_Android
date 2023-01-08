@@ -10,6 +10,9 @@ import ru.andrewkir.servo.R
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class StepsAdapter(private var dataSet: List<StepsObject>, private val listener: (FinanceObject) -> Unit) :
     RecyclerView.Adapter<StepsAdapter.ViewHolder>() {
@@ -36,7 +39,8 @@ class StepsAdapter(private var dataSet: List<StepsObject>, private val listener:
         viewHolder.run {
 
             steps.text = dataSet[position].steps.toString()
-            date.text = SimpleDateFormat("d MMMM").format(dataSet[position].date)
+            val mdate = LocalDateTime.parse(dataSet[position].date, DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)).toLocalDate()
+            date.text = "${mdate.dayOfMonth} ${mdate.monthValue}"
 
 //            removeButton.setOnClickListener {
 //                listener.invoke(dataSet[adapterPosition])
