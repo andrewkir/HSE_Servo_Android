@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
+import ru.andrewkir.servo.common.UserPrefsManager
 import ru.andrewkir.servo.databinding.FragmentLoginBinding
 import ru.andrewkir.servo.flows.aspects.finance.FinanceViewModel
 import ru.andrewkir.servo.flows.auth.AuthActivity
@@ -105,6 +106,11 @@ class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLogin
 
     private fun subscribeToLoginResult() {
         viewModel.loginResponse.observe(viewLifecycleOwner) {
+            val userPrefsManager = UserPrefsManager(requireContext())
+
+            userPrefsManager.accessToken = it.signinUser.session.accessToken
+            userPrefsManager.refreshToken = it.signinUser.session.refreshToken
+
             startActivity(Intent(requireContext(), MainScreenActivity::class.java))
             activity?.finish()
         }

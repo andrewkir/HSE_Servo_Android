@@ -1,0 +1,5 @@
+mutation CreateStepsActivityRecord($data: StepsActivityRecordCreateInput!) {
+    createStepsActivityRecord(data: $data) {
+        createdAt
+    }
+}

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,12 @@ import ru.andrewkir.servo.databinding.FragmentAspectStepsBinding
 import ru.andrewkir.servo.flows.aspects.steps.adapters.StepsAdapter
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
+import ru.andrewkir.type.DateTime
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.chrono.ChronoLocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -82,38 +88,56 @@ class StepsFragment :
     }
 
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
-    private fun setupDate(){
+    private fun setupDate() {
         selectedDate = Calendar.getInstance()
         weekAgoDate = Calendar.getInstance()
         weekAgoDate.add(Calendar.DATE, -7)
 
         val sdf = SimpleDateFormat("d MMMM")
 
-        bind.dateView.text = "с ${sdf.format(weekAgoDate.time).lowercase()} по ${sdf.format(selectedDate.time).lowercase()}"
+        bind.dateView.text = "с ${sdf.format(weekAgoDate.time).lowercase()} по ${
+            sdf.format(selectedDate.time).lowercase()
+        }"
 
         bind.nextDateButton.setOnClickListener {
             selectedDate.add(Calendar.DATE, 7)
             weekAgoDate.add(Calendar.DATE, 7)
             updateStepsToDate()
-            bind.dateView.text = "с ${sdf.format(weekAgoDate.time).lowercase()} по ${sdf.format(selectedDate.time).lowercase()}"
+            bind.dateView.text = "с ${sdf.format(weekAgoDate.time).lowercase()} по ${
+                sdf.format(selectedDate.time).lowercase()
+            }"
         }
 
         bind.previousDateButton.setOnClickListener {
             selectedDate.add(Calendar.DATE, -7)
             weekAgoDate.add(Calendar.DATE, -7)
             updateStepsToDate()
-            bind.dateView.text = "с ${sdf.format(weekAgoDate.time).lowercase()} по ${sdf.format(selectedDate.time).lowercase()}"
+            bind.dateView.text = "с ${sdf.format(weekAgoDate.time).lowercase()} по ${
+                sdf.format(selectedDate.time).lowercase()
+            }"
         }
     }
 
-    private fun updateStepsToDate(){
-        var steps = viewModel.stepsData.value.stepsList.filter { it.date >= weekAgoDate.time && it.date < selectedDate.time}
+    private fun updateStepsToDate() {
+        var steps = viewModel.stepsData.value.stepsList.filter {
+            LocalDateTime.parse(
+                it.date,
+                DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)
+            ).toLocalDate() >= LocalDateTime.parse(weekAgoDate.time.toString(), DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)).toLocalDate() && LocalDateTime.parse(
+                it.date,
+                DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)
+            ).toLocalDate() < LocalDateTime.parse(selectedDate.time.toString(), DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)).toLocalDate()
+        }
         setupStepsView(bind.barChart, StepsModel(steps))
         adapter.setData(steps)
     }
 
     companion object {
-        fun setupStepsView(barChart: BarChart, stepsModel: StepsModel, isBackGroundWhite: Boolean = false) {
+        fun setupStepsView(
+            barChart: BarChart,
+            stepsModel: StepsModel,
+            isBackGroundWhite: Boolean = false
+        ) {
             val dataset = getDataSet(stepsModel)
             val data = BarData(dataset.first)
             if (!isBackGroundWhite) dataset.first.valueTextColor = Color.WHITE
@@ -152,7 +176,7 @@ class StepsFragment :
 
             val formatter: ValueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
-                    if(dataset.second.isEmpty()) return ""
+                    if (dataset.second.isEmpty()) return ""
                     return dataset.second[value.toInt() % dataset.second.size]
                 }
             }
@@ -170,7 +194,11 @@ class StepsFragment :
             val stepsList = stepsModel.stepsList.sortedBy { it.date }
             for (i in stepsList.indices) {
                 valueSet.add(BarEntry(i.toFloat(), stepsList[i].steps.toFloat()))
-                labels.add(SimpleDateFormat("dd/MM").format(stepsList[i].date))
+                val date = LocalDateTime.parse(
+                    stepsList[i].date,
+                    DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)
+                ).toLocalDate()
+                labels.add("${date.dayOfMonth}/${date.monthValue}")
             }
 
             val barDataSet = BarDataSet(valueSet, "")
@@ -226,7 +254,8 @@ class StepsFragment :
                 closeDialog = true
                 viewModel.addSteps(
                     StepsObject(
-                        date = SimpleDateFormat("dd.MM.yyyy").parse(date.text.toString()),
+                        date = SimpleDateFormat("dd.MM.yyyy").parse(date.text.toString())
+                            .toString(),
                         steps = count.text.toString().toInt()
                     )
                 )

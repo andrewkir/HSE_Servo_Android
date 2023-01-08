@@ -22,7 +22,7 @@ class DataModule {
     @Provides
     fun provideDashBoardRepository(): DashboardRepository = DashboardRepository()
     @Provides
-    fun provideStepsRepository(): StepsRepository = StepsRepository()
+    fun provideStepsRepository(context: Context): StepsRepository = StepsRepository(ApolloProvider(context))
     @Provides
     fun provideEmotionsRepository(): EmotionsRepository = EmotionsRepository()
 }

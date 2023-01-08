@@ -7,13 +7,14 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import ru.andrewkir.servo.common.BaseRepository
+import ru.andrewkir.servo.common.UserPrefsManager
 
 
 class JWTAuthenticator(
     context: Context,
 ) : Authenticator, BaseRepository() {
 
-//    private val prefsManager = UserPrefsManager(context)
+    private val prefsManager = UserPrefsManager(context)
 
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {

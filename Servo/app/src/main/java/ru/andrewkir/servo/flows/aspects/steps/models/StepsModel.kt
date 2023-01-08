@@ -12,5 +12,5 @@ data class StepsModel(
 @Parcelize
 data class StepsObject(
     var steps: Int,
-    var date: Date
+    var date: String
 ): Parcelable

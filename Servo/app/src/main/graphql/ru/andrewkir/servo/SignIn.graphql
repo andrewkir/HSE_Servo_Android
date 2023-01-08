@@ -1,6 +1,8 @@
 mutation SigninUser($data: UserSigninInput!) {
     signinUser(data: $data) {
-        id
-        firstName
+        session {
+            accessToken
+            refreshToken
+        }
     }
 }

@@ -99,11 +99,7 @@ class RegisterFragment : BaseFragment<RegisterViewModel, AuthRepository, Fragmen
 
     private fun subscribeToLoginResult() {
         viewModel.loginResponse.observe(viewLifecycleOwner) {
-            Toast.makeText(
-                requireContext(),
-                it.signinUser.firstName,
-                Toast.LENGTH_SHORT
-            ).show()
+
         }
     }
 

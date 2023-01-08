@@ -1,0 +1,6 @@
+query StepsActivityRecords {
+    stepsActivityRecords {
+        stepsCount
+        date
+    }
+}
