@@ -3,10 +3,7 @@ package ru.andrewkir.servo.network
 import android.content.Context
 import com.apollographql.apollo3.ApolloCall
 import com.apollographql.apollo3.ApolloClient
-import ru.andrewkir.CreateStepsActivityRecordMutation
-import ru.andrewkir.SigninUserMutation
-import ru.andrewkir.SignupUserMutation
-import ru.andrewkir.StepsActivityRecordsQuery
+import ru.andrewkir.*
 import ru.andrewkir.servo.network.common.BaseApolloClient
 import ru.andrewkir.type.StepsActivityRecord
 import ru.andrewkir.type.StepsActivityRecordCreateInput
@@ -30,5 +27,9 @@ class ApolloProvider(context: Context) : BaseApolloClient() {
 
     fun getSteps(): ApolloCall<StepsActivityRecordsQuery.Data> {
         return apolloClient.query(StepsActivityRecordsQuery())
+    }
+
+    fun refreshSession(data: String): ApolloCall<RefreshSessionMutation.Data> {
+        return apolloClient.mutation(RefreshSessionMutation(data))
     }
 }

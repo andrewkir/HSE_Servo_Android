@@ -1,0 +1,1376 @@
+type User {
+  id: ID!
+
+  email: String!
+
+  username: String!
+
+  firstName: String!
+
+  lastName: String!
+
+  birthDate: DateTime
+
+  createdAt: DateTime!
+
+  updatedAt: DateTime!
+
+  session: UserSession!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type FinancialRecord {
+  id: ID!
+
+  type: FinancialOperation!
+
+  title: String!
+
+  description: String
+
+  amount: Float!
+
+  date: DateTime
+
+  userRecords: UserRecord
+
+  userRecordsId: String
+
+  createdAt: DateTime!
+
+  updatedAt: DateTime!
+}
+
+enum FinancialOperation {
+  LOAN
+
+  DEBT
+}
+
+type StepsActivityRecord {
+  id: ID!
+
+  stepsCount: Int!
+
+  date: DateTime!
+
+  userRecords: UserRecord
+
+  userRecordsId: String
+
+  createdAt: DateTime!
+
+  updatedAt: DateTime!
+}
+
+type UserRecordCount {
+  financialRecords: Int!
+
+  emotionalRecords: Int!
+
+  stepsActivityRecords: Int!
+}
+
+type UserRecord {
+  id: ID!
+
+  user: User!
+
+  userId: Int!
+
+  financialRecords: [FinancialRecord!]
+
+  emotionalRecords: [EmotionalStateRecord!]
+
+  stepsActivityRecords: [StepsActivityRecord!]
+
+  createdAt: DateTime!
+
+  updatedAt: DateTime!
+
+  _count: UserRecordCount!
+}
+
+type EmotionalStateRecord {
+  id: ID!
+
+  state: EmotionalState!
+
+  description: String
+
+  date: DateTime!
+
+  userRecords: UserRecord
+
+  userRecordsId: String
+
+  createdAt: DateTime!
+
+  updatedAt: DateTime!
+}
+
+enum EmotionalState {
+  SAD
+
+  NORMAL
+
+  HAPPY
+}
+
+type UserSession {
+  accessToken: String!
+
+  accessTokenExpiresIn: Float!
+
+  refreshToken: String!
+
+  refreshTokenExpiresIn: Float!
+}
+
+type Query {
+  user: User!
+
+  userRecords: UserRecord
+
+  financialRecords: [FinancialRecord!]!
+
+  emotionalStateRecords: [EmotionalStateRecord!]!
+
+  stepsActivityRecords: [StepsActivityRecord!]!
+}
+
+type Mutation {
+  """
+  User registration
+  """
+  signupUser(data: UserCreateInput!): User!
+
+  """
+  User authentication
+  """
+  signinUser(data: UserSigninInput!): User!
+
+  """
+  Refresh user session
+  """
+  refreshSession(refreshToken: String!): UserSession!
+
+  createFinancialRecord(data: FinancialRecordCreateInput!): FinancialRecord!
+
+  updateFinancialRecord(id: String!, data: FinancialRecordUpdateInput!): FinancialRecord!
+
+  deleteFinancialRecord(id: String!): FinancialRecord!
+
+  createEmotionalStateRecord(data: EmotionalStateRecordCreateInput!): EmotionalStateRecord!
+
+  updateEmotionalStateRecord(id: String!, data: EmotionalStateRecordUpdateInput!): EmotionalStateRecord!
+
+  deleteEmotionalStateRecord(id: String!): EmotionalStateRecord!
+
+  createStepsActivityRecord(data: StepsActivityRecordCreateInput!): StepsActivityRecord!
+
+  updateStepsActivityRecord(id: String!, data: StepsActivityRecordUpdateInput!): StepsActivityRecord!
+
+  deleteStepsActivityRecord(id: String!): StepsActivityRecord!
+}
+
+input UserCreateInput {
+  email: String!
+
+  username: String!
+
+  password: String!
+
+  firstName: String!
+
+  lastName: String!
+
+  birthDate: DateTime
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input UserSigninInput {
+  email: String
+
+  username: String
+
+  password: String!
+}
+
+input FinancialRecordCreateInput {
+  id: String
+
+  type: FinancialOperation!
+
+  title: String!
+
+  description: String
+
+  amount: Float!
+
+  date: DateTime
+
+  userRecords: UserRecordCreateNestedOneWithoutFinancialRecordsInput
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input UserRecordCreateNestedOneWithoutFinancialRecordsInput {
+  create: UserRecordCreateWithoutFinancialRecordsInput
+
+  connectOrCreate: UserRecordCreateOrConnectWithoutFinancialRecordsInput
+
+  connect: UserRecordWhereUniqueInput
+}
+
+input UserRecordCreateWithoutFinancialRecordsInput {
+  id: String
+
+  user: UserCreateNestedOneWithoutRecordsInput!
+
+  emotionalRecords: EmotionalStateRecordCreateNestedManyWithoutUserRecordsInput
+
+  stepsActivityRecords: StepsActivityRecordCreateNestedManyWithoutUserRecordsInput
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input UserCreateNestedOneWithoutRecordsInput {
+  create: UserCreateWithoutRecordsInput
+
+  connectOrCreate: UserCreateOrConnectWithoutRecordsInput
+
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutRecordsInput {
+  email: String!
+
+  username: String!
+
+  password: String!
+
+  firstName: String!
+
+  lastName: String!
+
+  birthDate: DateTime
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input UserCreateOrConnectWithoutRecordsInput {
+  where: UserWhereUniqueInput!
+
+  create: UserCreateWithoutRecordsInput!
+}
+
+input UserWhereUniqueInput {
+  id: Int
+
+  email: String
+
+  username: String
+}
+
+input EmotionalStateRecordCreateNestedManyWithoutUserRecordsInput {
+  create: [EmotionalStateRecordCreateWithoutUserRecordsInput!]
+
+  connectOrCreate: [EmotionalStateRecordCreateOrConnectWithoutUserRecordsInput!]
+
+  createMany: EmotionalStateRecordCreateManyUserRecordsInputEnvelope
+
+  connect: [EmotionalStateRecordWhereUniqueInput!]
+}
+
+input EmotionalStateRecordCreateWithoutUserRecordsInput {
+  id: String
+
+  state: EmotionalState!
+
+  description: String
+
+  date: DateTime!
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input EmotionalStateRecordCreateOrConnectWithoutUserRecordsInput {
+  where: EmotionalStateRecordWhereUniqueInput!
+
+  create: EmotionalStateRecordCreateWithoutUserRecordsInput!
+}
+
+input EmotionalStateRecordWhereUniqueInput {
+  id: String
+}
+
+input EmotionalStateRecordCreateManyUserRecordsInputEnvelope {
+  data: [EmotionalStateRecordCreateManyUserRecordsInput!]!
+
+  skipDuplicates: Boolean
+}
+
+input EmotionalStateRecordCreateManyUserRecordsInput {
+  id: String
+
+  state: EmotionalState!
+
+  description: String
+
+  date: DateTime!
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input StepsActivityRecordCreateNestedManyWithoutUserRecordsInput {
+  create: [StepsActivityRecordCreateWithoutUserRecordsInput!]
+
+  connectOrCreate: [StepsActivityRecordCreateOrConnectWithoutUserRecordsInput!]
+
+  createMany: StepsActivityRecordCreateManyUserRecordsInputEnvelope
+
+  connect: [StepsActivityRecordWhereUniqueInput!]
+}
+
+input StepsActivityRecordCreateWithoutUserRecordsInput {
+  id: String
+
+  stepsCount: Int!
+
+  date: DateTime!
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input StepsActivityRecordCreateOrConnectWithoutUserRecordsInput {
+  where: StepsActivityRecordWhereUniqueInput!
+
+  create: StepsActivityRecordCreateWithoutUserRecordsInput!
+}
+
+input StepsActivityRecordWhereUniqueInput {
+  id: String
+}
+
+input StepsActivityRecordCreateManyUserRecordsInputEnvelope {
+  data: [StepsActivityRecordCreateManyUserRecordsInput!]!
+
+  skipDuplicates: Boolean
+}
+
+input StepsActivityRecordCreateManyUserRecordsInput {
+  id: String
+
+  stepsCount: Int!
+
+  date: DateTime!
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input UserRecordCreateOrConnectWithoutFinancialRecordsInput {
+  where: UserRecordWhereUniqueInput!
+
+  create: UserRecordCreateWithoutFinancialRecordsInput!
+}
+
+input UserRecordWhereUniqueInput {
+  id: String
+
+  userId: Int
+}
+
+input FinancialRecordUpdateInput {
+  id: StringFieldUpdateOperationsInput
+
+  type: EnumFinancialOperationFieldUpdateOperationsInput
+
+  title: StringFieldUpdateOperationsInput
+
+  description: NullableStringFieldUpdateOperationsInput
+
+  amount: FloatFieldUpdateOperationsInput
+
+  date: NullableDateTimeFieldUpdateOperationsInput
+
+  userRecords: UserRecordUpdateOneWithoutFinancialRecordsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input StringFieldUpdateOperationsInput {
+  set: String
+}
+
+input EnumFinancialOperationFieldUpdateOperationsInput {
+  set: FinancialOperation
+}
+
+input NullableStringFieldUpdateOperationsInput {
+  set: String
+}
+
+input FloatFieldUpdateOperationsInput {
+  set: Float
+
+  increment: Float
+
+  decrement: Float
+
+  multiply: Float
+
+  divide: Float
+}
+
+input NullableDateTimeFieldUpdateOperationsInput {
+  set: DateTime
+}
+
+input UserRecordUpdateOneWithoutFinancialRecordsInput {
+  create: UserRecordCreateWithoutFinancialRecordsInput
+
+  connectOrCreate: UserRecordCreateOrConnectWithoutFinancialRecordsInput
+
+  upsert: UserRecordUpsertWithoutFinancialRecordsInput
+
+  disconnect: Boolean
+
+  delete: Boolean
+
+  connect: UserRecordWhereUniqueInput
+
+  update: UserRecordUpdateWithoutFinancialRecordsInput
+}
+
+input UserRecordUpsertWithoutFinancialRecordsInput {
+  update: UserRecordUpdateWithoutFinancialRecordsInput!
+
+  create: UserRecordCreateWithoutFinancialRecordsInput!
+}
+
+input UserRecordUpdateWithoutFinancialRecordsInput {
+  id: StringFieldUpdateOperationsInput
+
+  user: UserUpdateOneRequiredWithoutRecordsInput
+
+  emotionalRecords: EmotionalStateRecordUpdateManyWithoutUserRecordsInput
+
+  stepsActivityRecords: StepsActivityRecordUpdateManyWithoutUserRecordsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input UserUpdateOneRequiredWithoutRecordsInput {
+  create: UserCreateWithoutRecordsInput
+
+  connectOrCreate: UserCreateOrConnectWithoutRecordsInput
+
+  upsert: UserUpsertWithoutRecordsInput
+
+  connect: UserWhereUniqueInput
+
+  update: UserUpdateWithoutRecordsInput
+}
+
+input UserUpsertWithoutRecordsInput {
+  update: UserUpdateWithoutRecordsInput!
+
+  create: UserCreateWithoutRecordsInput!
+}
+
+input UserUpdateWithoutRecordsInput {
+  email: StringFieldUpdateOperationsInput
+
+  username: StringFieldUpdateOperationsInput
+
+  password: StringFieldUpdateOperationsInput
+
+  firstName: StringFieldUpdateOperationsInput
+
+  lastName: StringFieldUpdateOperationsInput
+
+  birthDate: NullableDateTimeFieldUpdateOperationsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input DateTimeFieldUpdateOperationsInput {
+  set: DateTime
+}
+
+input EmotionalStateRecordUpdateManyWithoutUserRecordsInput {
+  create: [EmotionalStateRecordCreateWithoutUserRecordsInput!]
+
+  connectOrCreate: [EmotionalStateRecordCreateOrConnectWithoutUserRecordsInput!]
+
+  upsert: [EmotionalStateRecordUpsertWithWhereUniqueWithoutUserRecordsInput!]
+
+  createMany: EmotionalStateRecordCreateManyUserRecordsInputEnvelope
+
+  set: [EmotionalStateRecordWhereUniqueInput!]
+
+  disconnect: [EmotionalStateRecordWhereUniqueInput!]
+
+  delete: [EmotionalStateRecordWhereUniqueInput!]
+
+  connect: [EmotionalStateRecordWhereUniqueInput!]
+
+  update: [EmotionalStateRecordUpdateWithWhereUniqueWithoutUserRecordsInput!]
+
+  updateMany: [EmotionalStateRecordUpdateManyWithWhereWithoutUserRecordsInput!]
+
+  deleteMany: [EmotionalStateRecordScalarWhereInput!]
+}
+
+input EmotionalStateRecordUpsertWithWhereUniqueWithoutUserRecordsInput {
+  where: EmotionalStateRecordWhereUniqueInput!
+
+  update: EmotionalStateRecordUpdateWithoutUserRecordsInput!
+
+  create: EmotionalStateRecordCreateWithoutUserRecordsInput!
+}
+
+input EmotionalStateRecordUpdateWithoutUserRecordsInput {
+  id: StringFieldUpdateOperationsInput
+
+  state: EnumEmotionalStateFieldUpdateOperationsInput
+
+  description: NullableStringFieldUpdateOperationsInput
+
+  date: DateTimeFieldUpdateOperationsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input EnumEmotionalStateFieldUpdateOperationsInput {
+  set: EmotionalState
+}
+
+input EmotionalStateRecordUpdateWithWhereUniqueWithoutUserRecordsInput {
+  where: EmotionalStateRecordWhereUniqueInput!
+
+  data: EmotionalStateRecordUpdateWithoutUserRecordsInput!
+}
+
+input EmotionalStateRecordUpdateManyWithWhereWithoutUserRecordsInput {
+  where: EmotionalStateRecordScalarWhereInput!
+
+  data: EmotionalStateRecordUpdateManyMutationInput!
+}
+
+input EmotionalStateRecordScalarWhereInput {
+  AND: [EmotionalStateRecordScalarWhereInput!]
+
+  OR: [EmotionalStateRecordScalarWhereInput!]
+
+  NOT: [EmotionalStateRecordScalarWhereInput!]
+
+  id: StringFilter
+
+  state: EnumEmotionalStateFilter
+
+  description: StringNullableFilter
+
+  date: DateTimeFilter
+
+  userRecordsId: StringNullableFilter
+
+  createdAt: DateTimeFilter
+
+  updatedAt: DateTimeFilter
+}
+
+input StringFilter {
+  equals: String
+
+  in: [String!]
+
+  notIn: [String!]
+
+  lt: String
+
+  lte: String
+
+  gt: String
+
+  gte: String
+
+  contains: String
+
+  startsWith: String
+
+  endsWith: String
+
+  mode: QueryMode
+
+  not: NestedStringFilter
+}
+
+enum QueryMode {
+  default
+
+  insensitive
+}
+
+input NestedStringFilter {
+  equals: String
+
+  in: [String!]
+
+  notIn: [String!]
+
+  lt: String
+
+  lte: String
+
+  gt: String
+
+  gte: String
+
+  contains: String
+
+  startsWith: String
+
+  endsWith: String
+
+  not: NestedStringFilter
+}
+
+input EnumEmotionalStateFilter {
+  equals: EmotionalState
+
+  in: [EmotionalState!]
+
+  notIn: [EmotionalState!]
+
+  not: NestedEnumEmotionalStateFilter
+}
+
+input NestedEnumEmotionalStateFilter {
+  equals: EmotionalState
+
+  in: [EmotionalState!]
+
+  notIn: [EmotionalState!]
+
+  not: NestedEnumEmotionalStateFilter
+}
+
+input StringNullableFilter {
+  equals: String
+
+  in: [String!]
+
+  notIn: [String!]
+
+  lt: String
+
+  lte: String
+
+  gt: String
+
+  gte: String
+
+  contains: String
+
+  startsWith: String
+
+  endsWith: String
+
+  mode: QueryMode
+
+  not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+  equals: String
+
+  in: [String!]
+
+  notIn: [String!]
+
+  lt: String
+
+  lte: String
+
+  gt: String
+
+  gte: String
+
+  contains: String
+
+  startsWith: String
+
+  endsWith: String
+
+  not: NestedStringNullableFilter
+}
+
+input DateTimeFilter {
+  equals: DateTime
+
+  in: [DateTime!]
+
+  notIn: [DateTime!]
+
+  lt: DateTime
+
+  lte: DateTime
+
+  gt: DateTime
+
+  gte: DateTime
+
+  not: NestedDateTimeFilter
+}
+
+input NestedDateTimeFilter {
+  equals: DateTime
+
+  in: [DateTime!]
+
+  notIn: [DateTime!]
+
+  lt: DateTime
+
+  lte: DateTime
+
+  gt: DateTime
+
+  gte: DateTime
+
+  not: NestedDateTimeFilter
+}
+
+input EmotionalStateRecordUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+
+  state: EnumEmotionalStateFieldUpdateOperationsInput
+
+  description: NullableStringFieldUpdateOperationsInput
+
+  date: DateTimeFieldUpdateOperationsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input StepsActivityRecordUpdateManyWithoutUserRecordsInput {
+  create: [StepsActivityRecordCreateWithoutUserRecordsInput!]
+
+  connectOrCreate: [StepsActivityRecordCreateOrConnectWithoutUserRecordsInput!]
+
+  upsert: [StepsActivityRecordUpsertWithWhereUniqueWithoutUserRecordsInput!]
+
+  createMany: StepsActivityRecordCreateManyUserRecordsInputEnvelope
+
+  set: [StepsActivityRecordWhereUniqueInput!]
+
+  disconnect: [StepsActivityRecordWhereUniqueInput!]
+
+  delete: [StepsActivityRecordWhereUniqueInput!]
+
+  connect: [StepsActivityRecordWhereUniqueInput!]
+
+  update: [StepsActivityRecordUpdateWithWhereUniqueWithoutUserRecordsInput!]
+
+  updateMany: [StepsActivityRecordUpdateManyWithWhereWithoutUserRecordsInput!]
+
+  deleteMany: [StepsActivityRecordScalarWhereInput!]
+}
+
+input StepsActivityRecordUpsertWithWhereUniqueWithoutUserRecordsInput {
+  where: StepsActivityRecordWhereUniqueInput!
+
+  update: StepsActivityRecordUpdateWithoutUserRecordsInput!
+
+  create: StepsActivityRecordCreateWithoutUserRecordsInput!
+}
+
+input StepsActivityRecordUpdateWithoutUserRecordsInput {
+  id: StringFieldUpdateOperationsInput
+
+  stepsCount: IntFieldUpdateOperationsInput
+
+  date: DateTimeFieldUpdateOperationsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input IntFieldUpdateOperationsInput {
+  set: Int
+
+  increment: Int
+
+  decrement: Int
+
+  multiply: Int
+
+  divide: Int
+}
+
+input StepsActivityRecordUpdateWithWhereUniqueWithoutUserRecordsInput {
+  where: StepsActivityRecordWhereUniqueInput!
+
+  data: StepsActivityRecordUpdateWithoutUserRecordsInput!
+}
+
+input StepsActivityRecordUpdateManyWithWhereWithoutUserRecordsInput {
+  where: StepsActivityRecordScalarWhereInput!
+
+  data: StepsActivityRecordUpdateManyMutationInput!
+}
+
+input StepsActivityRecordScalarWhereInput {
+  AND: [StepsActivityRecordScalarWhereInput!]
+
+  OR: [StepsActivityRecordScalarWhereInput!]
+
+  NOT: [StepsActivityRecordScalarWhereInput!]
+
+  id: StringFilter
+
+  stepsCount: IntFilter
+
+  date: DateTimeFilter
+
+  userRecordsId: StringNullableFilter
+
+  createdAt: DateTimeFilter
+
+  updatedAt: DateTimeFilter
+}
+
+input IntFilter {
+  equals: Int
+
+  in: [Int!]
+
+  notIn: [Int!]
+
+  lt: Int
+
+  lte: Int
+
+  gt: Int
+
+  gte: Int
+
+  not: NestedIntFilter
+}
+
+input NestedIntFilter {
+  equals: Int
+
+  in: [Int!]
+
+  notIn: [Int!]
+
+  lt: Int
+
+  lte: Int
+
+  gt: Int
+
+  gte: Int
+
+  not: NestedIntFilter
+}
+
+input StepsActivityRecordUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+
+  stepsCount: IntFieldUpdateOperationsInput
+
+  date: DateTimeFieldUpdateOperationsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input EmotionalStateRecordCreateInput {
+  id: String
+
+  state: EmotionalState!
+
+  description: String
+
+  date: DateTime!
+
+  userRecords: UserRecordCreateNestedOneWithoutEmotionalRecordsInput
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input UserRecordCreateNestedOneWithoutEmotionalRecordsInput {
+  create: UserRecordCreateWithoutEmotionalRecordsInput
+
+  connectOrCreate: UserRecordCreateOrConnectWithoutEmotionalRecordsInput
+
+  connect: UserRecordWhereUniqueInput
+}
+
+input UserRecordCreateWithoutEmotionalRecordsInput {
+  id: String
+
+  user: UserCreateNestedOneWithoutRecordsInput!
+
+  financialRecords: FinancialRecordCreateNestedManyWithoutUserRecordsInput
+
+  stepsActivityRecords: StepsActivityRecordCreateNestedManyWithoutUserRecordsInput
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input FinancialRecordCreateNestedManyWithoutUserRecordsInput {
+  create: [FinancialRecordCreateWithoutUserRecordsInput!]
+
+  connectOrCreate: [FinancialRecordCreateOrConnectWithoutUserRecordsInput!]
+
+  createMany: FinancialRecordCreateManyUserRecordsInputEnvelope
+
+  connect: [FinancialRecordWhereUniqueInput!]
+}
+
+input FinancialRecordCreateWithoutUserRecordsInput {
+  id: String
+
+  type: FinancialOperation!
+
+  title: String!
+
+  description: String
+
+  amount: Float!
+
+  date: DateTime
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input FinancialRecordCreateOrConnectWithoutUserRecordsInput {
+  where: FinancialRecordWhereUniqueInput!
+
+  create: FinancialRecordCreateWithoutUserRecordsInput!
+}
+
+input FinancialRecordWhereUniqueInput {
+  id: String
+}
+
+input FinancialRecordCreateManyUserRecordsInputEnvelope {
+  data: [FinancialRecordCreateManyUserRecordsInput!]!
+
+  skipDuplicates: Boolean
+}
+
+input FinancialRecordCreateManyUserRecordsInput {
+  id: String
+
+  type: FinancialOperation!
+
+  title: String!
+
+  description: String
+
+  amount: Float!
+
+  date: DateTime
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input UserRecordCreateOrConnectWithoutEmotionalRecordsInput {
+  where: UserRecordWhereUniqueInput!
+
+  create: UserRecordCreateWithoutEmotionalRecordsInput!
+}
+
+input EmotionalStateRecordUpdateInput {
+  id: StringFieldUpdateOperationsInput
+
+  state: EnumEmotionalStateFieldUpdateOperationsInput
+
+  description: NullableStringFieldUpdateOperationsInput
+
+  date: DateTimeFieldUpdateOperationsInput
+
+  userRecords: UserRecordUpdateOneWithoutEmotionalRecordsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input UserRecordUpdateOneWithoutEmotionalRecordsInput {
+  create: UserRecordCreateWithoutEmotionalRecordsInput
+
+  connectOrCreate: UserRecordCreateOrConnectWithoutEmotionalRecordsInput
+
+  upsert: UserRecordUpsertWithoutEmotionalRecordsInput
+
+  disconnect: Boolean
+
+  delete: Boolean
+
+  connect: UserRecordWhereUniqueInput
+
+  update: UserRecordUpdateWithoutEmotionalRecordsInput
+}
+
+input UserRecordUpsertWithoutEmotionalRecordsInput {
+  update: UserRecordUpdateWithoutEmotionalRecordsInput!
+
+  create: UserRecordCreateWithoutEmotionalRecordsInput!
+}
+
+input UserRecordUpdateWithoutEmotionalRecordsInput {
+  id: StringFieldUpdateOperationsInput
+
+  user: UserUpdateOneRequiredWithoutRecordsInput
+
+  financialRecords: FinancialRecordUpdateManyWithoutUserRecordsInput
+
+  stepsActivityRecords: StepsActivityRecordUpdateManyWithoutUserRecordsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input FinancialRecordUpdateManyWithoutUserRecordsInput {
+  create: [FinancialRecordCreateWithoutUserRecordsInput!]
+
+  connectOrCreate: [FinancialRecordCreateOrConnectWithoutUserRecordsInput!]
+
+  upsert: [FinancialRecordUpsertWithWhereUniqueWithoutUserRecordsInput!]
+
+  createMany: FinancialRecordCreateManyUserRecordsInputEnvelope
+
+  set: [FinancialRecordWhereUniqueInput!]
+
+  disconnect: [FinancialRecordWhereUniqueInput!]
+
+  delete: [FinancialRecordWhereUniqueInput!]
+
+  connect: [FinancialRecordWhereUniqueInput!]
+
+  update: [FinancialRecordUpdateWithWhereUniqueWithoutUserRecordsInput!]
+
+  updateMany: [FinancialRecordUpdateManyWithWhereWithoutUserRecordsInput!]
+
+  deleteMany: [FinancialRecordScalarWhereInput!]
+}
+
+input FinancialRecordUpsertWithWhereUniqueWithoutUserRecordsInput {
+  where: FinancialRecordWhereUniqueInput!
+
+  update: FinancialRecordUpdateWithoutUserRecordsInput!
+
+  create: FinancialRecordCreateWithoutUserRecordsInput!
+}
+
+input FinancialRecordUpdateWithoutUserRecordsInput {
+  id: StringFieldUpdateOperationsInput
+
+  type: EnumFinancialOperationFieldUpdateOperationsInput
+
+  title: StringFieldUpdateOperationsInput
+
+  description: NullableStringFieldUpdateOperationsInput
+
+  amount: FloatFieldUpdateOperationsInput
+
+  date: NullableDateTimeFieldUpdateOperationsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input FinancialRecordUpdateWithWhereUniqueWithoutUserRecordsInput {
+  where: FinancialRecordWhereUniqueInput!
+
+  data: FinancialRecordUpdateWithoutUserRecordsInput!
+}
+
+input FinancialRecordUpdateManyWithWhereWithoutUserRecordsInput {
+  where: FinancialRecordScalarWhereInput!
+
+  data: FinancialRecordUpdateManyMutationInput!
+}
+
+input FinancialRecordScalarWhereInput {
+  AND: [FinancialRecordScalarWhereInput!]
+
+  OR: [FinancialRecordScalarWhereInput!]
+
+  NOT: [FinancialRecordScalarWhereInput!]
+
+  id: StringFilter
+
+  type: EnumFinancialOperationFilter
+
+  title: StringFilter
+
+  description: StringNullableFilter
+
+  amount: FloatFilter
+
+  date: DateTimeNullableFilter
+
+  userRecordsId: StringNullableFilter
+
+  createdAt: DateTimeFilter
+
+  updatedAt: DateTimeFilter
+}
+
+input EnumFinancialOperationFilter {
+  equals: FinancialOperation
+
+  in: [FinancialOperation!]
+
+  notIn: [FinancialOperation!]
+
+  not: NestedEnumFinancialOperationFilter
+}
+
+input NestedEnumFinancialOperationFilter {
+  equals: FinancialOperation
+
+  in: [FinancialOperation!]
+
+  notIn: [FinancialOperation!]
+
+  not: NestedEnumFinancialOperationFilter
+}
+
+input FloatFilter {
+  equals: Float
+
+  in: [Float!]
+
+  notIn: [Float!]
+
+  lt: Float
+
+  lte: Float
+
+  gt: Float
+
+  gte: Float
+
+  not: NestedFloatFilter
+}
+
+input NestedFloatFilter {
+  equals: Float
+
+  in: [Float!]
+
+  notIn: [Float!]
+
+  lt: Float
+
+  lte: Float
+
+  gt: Float
+
+  gte: Float
+
+  not: NestedFloatFilter
+}
+
+input DateTimeNullableFilter {
+  equals: DateTime
+
+  in: [DateTime!]
+
+  notIn: [DateTime!]
+
+  lt: DateTime
+
+  lte: DateTime
+
+  gt: DateTime
+
+  gte: DateTime
+
+  not: NestedDateTimeNullableFilter
+}
+
+input NestedDateTimeNullableFilter {
+  equals: DateTime
+
+  in: [DateTime!]
+
+  notIn: [DateTime!]
+
+  lt: DateTime
+
+  lte: DateTime
+
+  gt: DateTime
+
+  gte: DateTime
+
+  not: NestedDateTimeNullableFilter
+}
+
+input FinancialRecordUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+
+  type: EnumFinancialOperationFieldUpdateOperationsInput
+
+  title: StringFieldUpdateOperationsInput
+
+  description: NullableStringFieldUpdateOperationsInput
+
+  amount: FloatFieldUpdateOperationsInput
+
+  date: NullableDateTimeFieldUpdateOperationsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input StepsActivityRecordCreateInput {
+  id: String
+
+  stepsCount: Int!
+
+  date: DateTime!
+
+  userRecords: UserRecordCreateNestedOneWithoutStepsActivityRecordsInput
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input UserRecordCreateNestedOneWithoutStepsActivityRecordsInput {
+  create: UserRecordCreateWithoutStepsActivityRecordsInput
+
+  connectOrCreate: UserRecordCreateOrConnectWithoutStepsActivityRecordsInput
+
+  connect: UserRecordWhereUniqueInput
+}
+
+input UserRecordCreateWithoutStepsActivityRecordsInput {
+  id: String
+
+  user: UserCreateNestedOneWithoutRecordsInput!
+
+  financialRecords: FinancialRecordCreateNestedManyWithoutUserRecordsInput
+
+  emotionalRecords: EmotionalStateRecordCreateNestedManyWithoutUserRecordsInput
+
+  createdAt: DateTime
+
+  updatedAt: DateTime
+}
+
+input UserRecordCreateOrConnectWithoutStepsActivityRecordsInput {
+  where: UserRecordWhereUniqueInput!
+
+  create: UserRecordCreateWithoutStepsActivityRecordsInput!
+}
+
+input StepsActivityRecordUpdateInput {
+  id: StringFieldUpdateOperationsInput
+
+  stepsCount: IntFieldUpdateOperationsInput
+
+  date: DateTimeFieldUpdateOperationsInput
+
+  userRecords: UserRecordUpdateOneWithoutStepsActivityRecordsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+input UserRecordUpdateOneWithoutStepsActivityRecordsInput {
+  create: UserRecordCreateWithoutStepsActivityRecordsInput
+
+  connectOrCreate: UserRecordCreateOrConnectWithoutStepsActivityRecordsInput
+
+  upsert: UserRecordUpsertWithoutStepsActivityRecordsInput
+
+  disconnect: Boolean
+
+  delete: Boolean
+
+  connect: UserRecordWhereUniqueInput
+
+  update: UserRecordUpdateWithoutStepsActivityRecordsInput
+}
+
+input UserRecordUpsertWithoutStepsActivityRecordsInput {
+  update: UserRecordUpdateWithoutStepsActivityRecordsInput!
+
+  create: UserRecordCreateWithoutStepsActivityRecordsInput!
+}
+
+input UserRecordUpdateWithoutStepsActivityRecordsInput {
+  id: StringFieldUpdateOperationsInput
+
+  user: UserUpdateOneRequiredWithoutRecordsInput
+
+  financialRecords: FinancialRecordUpdateManyWithoutUserRecordsInput
+
+  emotionalRecords: EmotionalStateRecordUpdateManyWithoutUserRecordsInput
+
+  createdAt: DateTimeFieldUpdateOperationsInput
+
+  updatedAt: DateTimeFieldUpdateOperationsInput
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

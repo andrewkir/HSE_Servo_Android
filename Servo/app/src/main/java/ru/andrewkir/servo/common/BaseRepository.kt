@@ -2,12 +2,12 @@ package ru.andrewkir.servo.common
 
 import com.apollographql.apollo3.ApolloCall
 import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.api.Mutation
 import com.apollographql.apollo3.api.Operation
 import com.apollographql.apollo3.api.Query
 import com.apollographql.apollo3.exception.ApolloException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.andrewkir.RefreshSessionMutation
 import ru.andrewkir.servo.network.common.ApiResponse
 import java.net.SocketTimeoutException
 

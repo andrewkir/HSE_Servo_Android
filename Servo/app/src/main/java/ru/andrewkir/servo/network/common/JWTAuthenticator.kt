@@ -8,29 +8,36 @@ import okhttp3.Response
 import okhttp3.Route
 import ru.andrewkir.servo.common.BaseRepository
 import ru.andrewkir.servo.common.UserPrefsManager
+import ru.andrewkir.servo.network.ApolloProvider
 
 
 class JWTAuthenticator(
-    context: Context,
+    private val context: Context,
 ) : Authenticator, BaseRepository() {
 
     private val prefsManager = UserPrefsManager(context)
 
+
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {
-//            val refreshToken = prefsManager.refreshToken
-//            when (val tokensResponse =
-//                protectedApiCall { tokensApi.refreshAccessToken(refreshToken!!) }
-//            ) {
-//                is ApiResponse.OnSuccessResponse -> {
-//                    prefsManager.accessToken = tokensResponse.value.access_token
-//
-//                    prefsManager.refreshToken = tokensResponse.value.refresh_token
-            response.request.newBuilder()
-                        .header("Authorization", "Bearer {tokensResponse.value.access_token}")
+            val refreshToken = prefsManager.refreshToken
+            val api = ApolloProvider(context)
+            when (val tokensResponse =
+                protectedApiCall(
+                    api.refreshSession(refreshToken ?: "")
+                )
+            ) {
+                is ApiResponse.OnSuccessResponse -> {
+                    prefsManager.accessToken =
+                        tokensResponse.value.data?.refreshSession?.accessToken
+                    prefsManager.refreshToken =
+                        tokensResponse.value.data?.refreshSession?.refreshToken
+                    response.request.newBuilder()
+                        .header("Authorization", "Bearer ${prefsManager.accessToken}")
                         .build()
-//                }
-//                else -> null
+                }
+                else -> null
+            }
         }
     }
 }

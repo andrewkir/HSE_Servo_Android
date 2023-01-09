@@ -34,7 +34,7 @@ class StepsViewModel @Inject constructor(
     val stepsResponse: LiveData<StepsActivityRecordsQuery.Data>
         get() = mutableStepsResponse
 
-    fun getData() {
+    private fun getData() {
         viewModelScope.launch {
             mutableLoading.value = true
             when(val result = stepsRepository.getSteps()){
@@ -51,7 +51,10 @@ class StepsViewModel @Inject constructor(
 
     fun addSteps(stepsObject: StepsObject){
         viewModelScope.launch {
-            val items = _stepsData.value.copy().stepsList as MutableList
+            var items: MutableList<StepsObject> = mutableListOf()
+            if(_stepsData.value.copy().stepsList.isNotEmpty()) {
+                items = _stepsData.value.copy().stepsList as MutableList
+            }
             val newItems: MutableList<StepsObject> = items.map { it.copy() } as MutableList<StepsObject>
             newItems.add(stepsObject)
             _stepsData.value = _stepsData.value.copy(stepsList = newItems)

@@ -3,7 +3,6 @@ package ru.andrewkir.servo.flows.auth
 import ru.andrewkir.servo.common.BaseRepository
 import ru.andrewkir.servo.network.ApolloProvider
 import ru.andrewkir.type.UserSigninInput
-import java.util.Optional
 
 class AuthRepository(
     private val api: ApolloProvider

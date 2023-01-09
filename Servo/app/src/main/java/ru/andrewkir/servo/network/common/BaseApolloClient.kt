@@ -8,6 +8,7 @@ import com.apollographql.apollo3.api.http.HttpResponse
 import com.apollographql.apollo3.network.http.HttpInterceptor
 import com.apollographql.apollo3.network.http.HttpInterceptorChain
 import com.apollographql.apollo3.network.http.LoggingInterceptor
+import com.apollographql.apollo3.network.okHttpClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import ru.andrewkir.servo.BuildConfig
@@ -20,7 +21,18 @@ open class BaseApolloClient {
             .Builder()
             .serverUrl(BASE_URL)
             .addHttpInterceptor(LoggingInterceptor { str: String -> Log.d("APOLLO", str) })
-            .addHttpInterceptor(AuthorizationInterceptor(UserPrefsManager(context).accessToken ?: ""))
+            .addHttpInterceptor(
+                AuthorizationInterceptor(
+                    UserPrefsManager(context).accessToken ?: ""
+                )
+            )
+            .okHttpClient(
+                provideOkHTPPClient(
+                    JWTAuthenticator(context),
+                    UserPrefsManager(context).accessToken ?: "",
+                    UserPrefsManager(context).refreshToken ?: ""
+                )
+            )
             .build()
 
     class AuthorizationInterceptor(val token: String) : HttpInterceptor {

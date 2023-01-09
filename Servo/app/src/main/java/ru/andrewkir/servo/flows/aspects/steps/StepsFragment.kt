@@ -80,9 +80,9 @@ class StepsFragment :
         bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         lifecycleScope.launchWhenCreated {
-            viewModel.stepsData.collectLatest {
+            viewModel.stepsResponse.observe(viewLifecycleOwner) {
                 updateStepsToDate()
-                adapter.setData(it.stepsList)
+                adapter.setData(it.stepsActivityRecords.map { stepsActivityRecord -> StepsObject(stepsActivityRecord.stepsCount, stepsActivityRecord.date.toString()) })
             }
         }
     }

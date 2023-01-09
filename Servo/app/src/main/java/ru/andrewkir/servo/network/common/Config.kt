@@ -1,3 +1,3 @@
 package ru.andrewkir.servo.network.common
 
-const val BASE_URL = "http://172.20.10.2:3000/graphql"
+const val BASE_URL = "http://192.168.0.20:3000/graphql"

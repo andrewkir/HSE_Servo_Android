@@ -39,7 +39,7 @@ class StepsAdapter(private var dataSet: List<StepsObject>, private val listener:
         viewHolder.run {
 
             steps.text = dataSet[position].steps.toString()
-            val mdate = LocalDateTime.parse(dataSet[position].date, DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)).toLocalDate()
+            val mdate = LocalDateTime.parse(dataSet[position].date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)).toLocalDate()
             date.text = "${mdate.dayOfMonth} ${mdate.monthValue}"
 
 //            removeButton.setOnClickListener {
