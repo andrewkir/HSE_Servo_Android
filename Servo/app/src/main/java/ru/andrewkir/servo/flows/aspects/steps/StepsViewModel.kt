@@ -1,17 +1,23 @@
 package ru.andrewkir.servo.flows.aspects.steps
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.apollographql.apollo3.api.Optional
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import ru.andrewkir.SigninUserMutation
+import ru.andrewkir.StepsActivityRecordsQuery
 import ru.andrewkir.servo.common.BaseViewModel
 import ru.andrewkir.servo.flows.aspects.finance.FinanceRepository
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
+import ru.andrewkir.servo.network.common.ApiResponse
 import java.util.Date
 import javax.inject.Inject
 
@@ -19,17 +25,27 @@ class StepsViewModel @Inject constructor(
     val stepsRepository: StepsRepository
 ) : BaseViewModel(stepsRepository) {
 
-    var mStepsData: MutableList<StepsObject> = mutableListOf()
-
     private val _stepsData = MutableStateFlow(StepsModel())
     val stepsData: StateFlow<StepsModel> = _stepsData
 
+    private val mutableStepsResponse: MutableLiveData<StepsActivityRecordsQuery.Data> =
+        MutableLiveData()
+
+    val stepsResponse: LiveData<StepsActivityRecordsQuery.Data>
+        get() = mutableStepsResponse
+
     fun getData() {
         viewModelScope.launch {
-            stepsRepository.getData().collect{
-                mStepsData = it.stepsList as MutableList<StepsObject>
-                _stepsData.value = StepsModel(mStepsData)
+            mutableLoading.value = true
+            when(val result = stepsRepository.getSteps()){
+                is ApiResponse.OnSuccessResponse -> {
+                    mutableStepsResponse.value = result.value.data!!
+                }
+                is ApiResponse.OnErrorResponse -> {
+                    errorResponse.value = result
+                }
             }
+            mutableLoading.value = false
         }
     }
 

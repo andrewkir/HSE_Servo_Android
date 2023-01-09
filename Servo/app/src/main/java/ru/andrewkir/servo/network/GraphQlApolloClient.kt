@@ -28,7 +28,7 @@ class ApolloProvider(context: Context) : BaseApolloClient() {
         return apolloClient.mutation(CreateStepsActivityRecordMutation(data))
     }
 
-    fun getSteps(data: StepsActivityRecord): ApolloCall<StepsActivityRecordsQuery.Data> {
-        return apolloClient.query(StepsActivityRecordsQuery)
+    fun getSteps(): ApolloCall<StepsActivityRecordsQuery.Data> {
+        return apolloClient.query(StepsActivityRecordsQuery())
     }
 }

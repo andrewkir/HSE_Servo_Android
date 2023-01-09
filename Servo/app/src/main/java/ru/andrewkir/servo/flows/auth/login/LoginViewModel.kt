@@ -23,7 +23,7 @@ class LoginViewModel(
     fun loginByUsername(username: String, password: String) {
         viewModelScope.launch {
             mutableLoading.value = true
-            when(val result = repo.loginByUsername(Optional.present(username), password)){
+            when(val result = repo.loginByUsername(Optional.presentIfNotNull(username), password)){
                 is ApiResponse.OnSuccessResponse -> {
                     mutableLoginResponse.value = result.value.data!!
                 }
@@ -38,7 +38,7 @@ class LoginViewModel(
     fun loginByEmail(email: String, password: String) {
         viewModelScope.launch {
             mutableLoading.value = true
-            when(val result = repo.loginByEmail(Optional.present(email), password)){
+            when(val result = repo.loginByEmail(Optional.presentIfNotNull(email), password)){
                 is ApiResponse.OnSuccessResponse -> {
                     mutableLoginResponse.value = result.value.data!!
                 }
