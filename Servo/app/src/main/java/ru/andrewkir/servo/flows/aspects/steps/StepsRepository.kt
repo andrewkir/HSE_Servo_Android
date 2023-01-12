@@ -16,12 +16,6 @@ class StepsRepository(
         return MutableStateFlow(
             StepsModel(
                 arrayListOf(
-                    StepsObject(1200, Date().toString()),
-                    StepsObject(10000, Date().toString()),
-                    StepsObject(7000, Date().toString()),
-                    StepsObject(1200, Date().toString()),
-                    StepsObject(10000, Date().toString()),
-                    StepsObject(7000, Date().toString())
                 )
             )
         )

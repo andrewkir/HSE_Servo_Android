@@ -82,7 +82,19 @@ class StepsFragment :
         lifecycleScope.launchWhenCreated {
             viewModel.stepsResponse.observe(viewLifecycleOwner) {
                 updateStepsToDate()
-                adapter.setData(it.stepsActivityRecords.map { stepsActivityRecord -> StepsObject(stepsActivityRecord.stepsCount, stepsActivityRecord.date.toString()) })
+                adapter.setData(it.stepsActivityRecords.map { stepsActivityRecord ->
+                    StepsObject(
+                        stepsActivityRecord.stepsCount,
+                        stepsActivityRecord.date.toString()
+                    )
+                })
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.stepsData.collectLatest {
+                updateStepsToDate()
+                adapter.setData(it.stepsList)
             }
         }
     }
@@ -122,11 +134,17 @@ class StepsFragment :
         var steps = viewModel.stepsData.value.stepsList.filter {
             LocalDateTime.parse(
                 it.date,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+            ).toLocalDate() >= LocalDateTime.parse(
+                weekAgoDate.time.toString(),
                 DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)
-            ).toLocalDate() >= LocalDateTime.parse(weekAgoDate.time.toString(), DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)).toLocalDate() && LocalDateTime.parse(
+            ).toLocalDate() && LocalDateTime.parse(
                 it.date,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+            ).toLocalDate() < LocalDateTime.parse(
+                selectedDate.time.toString(),
                 DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)
-            ).toLocalDate() < LocalDateTime.parse(selectedDate.time.toString(), DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)).toLocalDate()
+            ).toLocalDate()
         }
         setupStepsView(bind.barChart, StepsModel(steps))
         adapter.setData(steps)
@@ -196,7 +214,7 @@ class StepsFragment :
                 valueSet.add(BarEntry(i.toFloat(), stepsList[i].steps.toFloat()))
                 val date = LocalDateTime.parse(
                     stepsList[i].date,
-                    DateTimeFormatter.ofPattern("E MMM d HH:mm:ss O yyyy", Locale.US)
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
                 ).toLocalDate()
                 labels.add("${date.dayOfMonth}/${date.monthValue}")
             }
@@ -254,8 +272,9 @@ class StepsFragment :
                 closeDialog = true
                 viewModel.addSteps(
                     StepsObject(
-                        date = SimpleDateFormat("dd.MM.yyyy").parse(date.text.toString())
-                            .toString(),
+                        date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(
+                            SimpleDateFormat("dd.MM.yyyy").parse(date.text.toString())
+                        ),
                         steps = count.text.toString().toInt()
                     )
                 )

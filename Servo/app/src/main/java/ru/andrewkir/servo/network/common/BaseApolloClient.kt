@@ -22,17 +22,18 @@ open class BaseApolloClient {
             .serverUrl(BASE_URL)
             .addHttpInterceptor(LoggingInterceptor { str: String -> Log.d("APOLLO", str) })
             .addHttpInterceptor(
-                AuthorizationInterceptor(
-                    UserPrefsManager(context).accessToken ?: ""
+                ApolloRefreshTokenInterceptor(
+                    context
                 )
             )
-            .okHttpClient(
-                provideOkHTPPClient(
-                    JWTAuthenticator(context),
-                    UserPrefsManager(context).accessToken ?: "",
-                    UserPrefsManager(context).refreshToken ?: ""
-                )
-            )
+//            .okHttpClient(
+//                provideOkHTPPClient(
+//                    JWTAuthenticator(context),
+//                    UserPrefsManager(context).accessToken ?: "",
+//                    UserPrefsManager(context).refreshToken ?: ""
+//                )
+//            )
+            .httpExposeErrorBody(true)
             .build()
 
     class AuthorizationInterceptor(val token: String) : HttpInterceptor {

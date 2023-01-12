@@ -9,15 +9,19 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class StepsAdapter(private var dataSet: List<StepsObject>, private val listener: (FinanceObject) -> Unit) :
+class StepsAdapter(
+    private var dataSet: List<StepsObject>,
+    private val listener: (FinanceObject) -> Unit
+) :
     RecyclerView.Adapter<StepsAdapter.ViewHolder>() {
 
-    fun setData(data: List<StepsObject>){
+    fun setData(data: List<StepsObject>) {
         dataSet = data.sortedBy { it.date }
         notifyDataSetChanged()
     }
@@ -34,13 +38,22 @@ class StepsAdapter(private var dataSet: List<StepsObject>, private val listener:
         return ViewHolder(view)
     }
 
-    @SuppressLint("SimpleDateFormat")
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.run {
 
             steps.text = dataSet[position].steps.toString()
-            val mdate = LocalDateTime.parse(dataSet[position].date, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)).toLocalDate()
-            date.text = "${mdate.dayOfMonth} ${mdate.monthValue}"
+            val mdate = LocalDateTime.parse(
+                dataSet[position].date,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+            ).toLocalDate()
+
+            date.text = "${mdate.dayOfMonth} ${
+                DateTimeFormatter.ofPattern(
+                    "MMMM",
+                    Locale.getDefault()
+                ).format(mdate)
+            }"
 
 //            removeButton.setOnClickListener {
 //                listener.invoke(dataSet[adapterPosition])
