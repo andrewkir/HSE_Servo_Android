@@ -12,13 +12,18 @@ import ru.andrewkir.servo.flows.aspects.emotions.EmotionsRepository
 import ru.andrewkir.servo.flows.aspects.emotions.models.Emotions
 import ru.andrewkir.servo.flows.aspects.emotions.models.EmotionsModel
 import ru.andrewkir.servo.flows.aspects.finance.FinanceRepository
+import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
+import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.StepsRepository
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
 import ru.andrewkir.servo.flows.main.dashboard.models.DashboardModel
 import ru.andrewkir.servo.flows.main.dashboard.models.EmotionsEntry
 import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
 import ru.andrewkir.servo.flows.main.dashboard.models.StepsEntry
+import ru.andrewkir.servo.network.common.ApiResponse
+import ru.andrewkir.type.FinancialOperation
 import javax.inject.Inject
 
 
@@ -52,8 +57,22 @@ class DashboardViewModel @Inject constructor(
 
     fun getData() {
         viewModelScope.launch {
-            financeRepository.getData().collect {
-                financeFlow.emit(it)
+            when (val result = financeRepository.getData()) {
+                is ApiResponse.OnSuccessResponse -> {
+                    val res = result.value.data?.financialRecords?.map { it ->
+                        FinanceObject(
+                            it.id,
+                            it.title,
+                            it.amount,
+                            it.date.toString(),
+                            if (it.type == FinancialOperation.DEBT) FinanceCategoryEnum.BANK_LOAN else FinanceCategoryEnum.GIVE_LOAN
+                        )
+                    }
+                    financeFlow.emit(FinanceModel(res!!.toMutableList()))
+                }
+                is ApiResponse.OnErrorResponse -> {
+                    errorResponse.value = result
+                }
             }
         }
     }
@@ -61,8 +80,18 @@ class DashboardViewModel @Inject constructor(
 
     fun getStepsData() {
         viewModelScope.launch {
-            stepsRepository.getData().collect {
-                stepsFlow.emit(it)
+            when (val result = stepsRepository.getSteps()) {
+                is ApiResponse.OnSuccessResponse -> {
+                    stepsFlow.emit(StepsModel(result.value.data!!.stepsActivityRecords.map { it ->
+                        StepsObject(
+                            it.stepsCount,
+                            it.date.toString()
+                        )
+                    }))
+                }
+                is ApiResponse.OnErrorResponse -> {
+                    errorResponse.value = result
+                }
             }
         }
     }

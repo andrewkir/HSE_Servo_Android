@@ -9,6 +9,10 @@ import ru.andrewkir.servo.common.BaseViewModel
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
+import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
+import ru.andrewkir.servo.network.common.ApiResponse
+import ru.andrewkir.type.FinancialOperation
 import javax.inject.Inject
 
 class FinanceViewModel @Inject constructor(
@@ -22,17 +26,35 @@ class FinanceViewModel @Inject constructor(
 
     fun getData() {
         viewModelScope.launch {
-            financeRepository.getData().collect{
-                mFinanceData = it.financeList as MutableList<FinanceObject>
-                _financeData.value = FinanceModel(mFinanceData)
+            mutableLoading.value = true
+            when (val result = financeRepository.getData()) {
+                is ApiResponse.OnSuccessResponse -> {
+                    val res = result.value.data?.financialRecords?.map { it ->
+                        FinanceObject(
+                            it.id,
+                            it.title,
+                            it.amount,
+                            it.date.toString(),
+                            if (it.type == FinancialOperation.DEBT) FinanceCategoryEnum.BANK_LOAN else FinanceCategoryEnum.GIVE_LOAN
+                        )
+                    }
+                    mFinanceData = res!!.toMutableList()
+                    _financeData.value = FinanceModel(mFinanceData)
+                }
+                is ApiResponse.OnErrorResponse -> {
+                    errorResponse.value = result
+                }
             }
+            mutableLoading.value = false
         }
     }
 
-    fun removeLoan(financeObject: FinanceObject){
+    fun removeLoan(financeObject: FinanceObject) {
         viewModelScope.launch {
             mFinanceData.remove(financeObject)
             _financeData.value = FinanceModel(mFinanceData)
+
+            financeRepository.deleteFinancialRecord(financeObject.id)
         }
     }
 
@@ -40,6 +62,8 @@ class FinanceViewModel @Inject constructor(
         viewModelScope.launch {
             mFinanceData.add(financeObject)
             _financeData.value = FinanceModel(mFinanceData)
+
+            financeRepository.addFinancialRecord(financeObject)
         }
     }
 

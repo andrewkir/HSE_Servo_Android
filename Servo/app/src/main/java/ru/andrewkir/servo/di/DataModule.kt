@@ -14,7 +14,7 @@ import ru.andrewkir.servo.network.ApolloProvider
 @Module
 class DataModule {
     @Provides
-    fun provideFinanceRepository(): FinanceRepository = FinanceRepository()
+    fun provideFinanceRepository(context: Context): FinanceRepository = FinanceRepository(ApolloProvider(context))
     @Provides
     fun provideAuthRepository(context: Context): AuthRepository = AuthRepository(ApolloProvider(context))
     @Provides

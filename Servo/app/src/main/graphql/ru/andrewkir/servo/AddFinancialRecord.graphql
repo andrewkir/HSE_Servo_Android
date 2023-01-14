@@ -1,0 +1,5 @@
+mutation CreateFinancialRecord($data: FinancialRecordCreateInput!) {
+    createFinancialRecord(data: $data) {
+        id
+    }
+}

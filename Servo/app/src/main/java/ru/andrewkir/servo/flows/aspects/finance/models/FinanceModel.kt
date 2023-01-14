@@ -12,13 +12,14 @@ data class FinanceModel(
 
 @Parcelize
 data class FinanceObject(
+    var id: String = UUID.randomUUID().toString(),
     var name: String? = null,
     var sum: Double? = null,
-    var date: Date? = null,
+    var date: String? = null,
     var category: FinanceCategoryEnum? = null
-): Parcelable
+) : Parcelable
 
-enum class FinanceCategoryEnum{
+enum class FinanceCategoryEnum {
     BANK_LOAN,
     UNOFFICIAL_LOAN,
     GIVE_LOAN

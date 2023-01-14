@@ -1,0 +1,10 @@
+query GetFinancialRecord {
+  financialRecords {
+    id
+    date
+    description
+    type
+    amount
+    title
+  }
+}

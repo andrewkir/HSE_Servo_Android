@@ -141,7 +141,9 @@ class FinanceFragment :
                     FinanceObject(
                         name = name.text.toString(),
                         sum = sum.text.toString().toDouble(),
-                        date = SimpleDateFormat("dd.MM.yyyy").parse(date.text.toString()),
+                        date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(
+                            SimpleDateFormat("dd.MM.yyyy").parse(date.text.toString())
+                        ),
                         category = if (bankLoanChip.isChecked) FinanceCategoryEnum.BANK_LOAN else
                             if (giveLoanChip.isChecked) FinanceCategoryEnum.GIVE_LOAN else FinanceCategoryEnum.UNOFFICIAL_LOAN
                     )

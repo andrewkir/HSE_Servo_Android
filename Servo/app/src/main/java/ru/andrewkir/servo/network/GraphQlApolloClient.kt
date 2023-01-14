@@ -5,7 +5,7 @@ import com.apollographql.apollo3.ApolloCall
 import com.apollographql.apollo3.ApolloClient
 import ru.andrewkir.*
 import ru.andrewkir.servo.network.common.BaseApolloClient
-import ru.andrewkir.type.StepsActivityRecord
+import ru.andrewkir.type.FinancialRecordCreateInput
 import ru.andrewkir.type.StepsActivityRecordCreateInput
 import ru.andrewkir.type.UserCreateInput
 import ru.andrewkir.type.UserSigninInput
@@ -31,5 +31,17 @@ class ApolloProvider(context: Context) : BaseApolloClient() {
 
     fun refreshSession(data: String): ApolloCall<RefreshSessionMutation.Data> {
         return apolloClient.mutation(RefreshSessionMutation(data))
+    }
+
+    fun addFinancialRecord(data: FinancialRecordCreateInput): ApolloCall<CreateFinancialRecordMutation.Data> {
+        return apolloClient.mutation(CreateFinancialRecordMutation(data))
+    }
+
+    fun getFinancialRecords(): ApolloCall<GetFinancialRecordQuery.Data> {
+        return apolloClient.query(GetFinancialRecordQuery())
+    }
+
+    fun deleteFinancialRecord(data: String): ApolloCall<DeleteFinancialRecordMutation.Data> {
+        return apolloClient.mutation(DeleteFinancialRecordMutation(data))
     }
 }

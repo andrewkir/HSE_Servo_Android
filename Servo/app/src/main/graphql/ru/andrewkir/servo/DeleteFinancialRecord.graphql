@@ -1,0 +1,5 @@
+mutation DeleteFinancialRecord($deleteFinancialRecordId: String!) {
+    deleteFinancialRecord(id: $deleteFinancialRecordId) {
+        id
+    }
+}
