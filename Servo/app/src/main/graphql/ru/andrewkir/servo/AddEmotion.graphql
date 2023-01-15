@@ -1,0 +1,5 @@
+mutation CreateEmotionalRecord($data: EmotionalStateRecordCreateInput!) {
+    createEmotionalStateRecord(data: $data) {
+        id
+    }
+}

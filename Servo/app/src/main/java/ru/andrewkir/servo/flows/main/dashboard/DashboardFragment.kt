@@ -118,6 +118,7 @@ class DashboardFragment :
 
         viewModel.getData()
         viewModel.getStepsData()
+        viewModel.getEmotionsData()
     }
 
     override fun onDestroyView() {

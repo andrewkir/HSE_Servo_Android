@@ -1,0 +1,8 @@
+query GetEmotions {
+    emotionalStateRecords {
+        id
+        state
+        date
+        description
+    }
+}

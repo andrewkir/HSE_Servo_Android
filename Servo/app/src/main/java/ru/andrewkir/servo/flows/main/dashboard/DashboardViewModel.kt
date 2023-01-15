@@ -23,7 +23,9 @@ import ru.andrewkir.servo.flows.main.dashboard.models.EmotionsEntry
 import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
 import ru.andrewkir.servo.flows.main.dashboard.models.StepsEntry
 import ru.andrewkir.servo.network.common.ApiResponse
+import ru.andrewkir.type.EmotionalState
 import ru.andrewkir.type.FinancialOperation
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -42,7 +44,9 @@ class DashboardViewModel @Inject constructor(
         MutableStateFlow(
             listOf(
                 EmotionsModel(
+                    UUID.randomUUID().toString(),
                     Emotions.HAPPY,
+                    "",
                     ""
                 )
             )
@@ -52,7 +56,7 @@ class DashboardViewModel @Inject constructor(
     private var cardsData = mutableListOf(
         FinanceEntry(FinanceModel()),
         StepsEntry(StepsModel()),
-        EmotionsEntry(listOf(EmotionsModel(Emotions.HAPPY, "")))
+        EmotionsEntry(listOf(EmotionsModel(UUID.randomUUID().toString(), Emotions.HAPPY, "", "")))
     )
 
     fun getData() {
@@ -98,8 +102,20 @@ class DashboardViewModel @Inject constructor(
 
     fun getEmotionsData() {
         viewModelScope.launch {
-            emotionsRepository.getData().collect {
-                emotionsFlow.emit(it)
+            when (val result = emotionsRepository.getData()) {
+                is ApiResponse.OnSuccessResponse -> {
+                    result.value.data?.emotionalStateRecords?.map { it ->
+                        EmotionsModel(
+                            it.id,
+                            if (it.state == EmotionalState.HAPPY) Emotions.HAPPY else if (it.state == EmotionalState.NORMAL) Emotions.NORMAL else Emotions.SAD,
+                            it.description,
+                            it.date.toString()
+                        )
+                    }?.let { it1 -> emotionsFlow.emit(it1) }
+                }
+                is ApiResponse.OnErrorResponse -> {
+                    errorResponse.value = result
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -114,8 +115,10 @@ class DashboardAdapter(
                 viewHolder.card?.setOnClickListener { onItemClick?.invoke(DashboardViews.EmotionsView) }
 
                 setupEmotionsView(
+                    viewHolder.card?.context!!,
                     (data[position] as EmotionsEntry).data!!,
-                    true
+                    true,
+                    viewHolder.icon!!
                 )
             }
         }
@@ -148,10 +151,14 @@ class DashboardAdapter(
     inner class EmotionsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView? = null
         var card: CardView? = null
+        var description: TextView? = null
+        var icon: ImageView? = null
 
         init {
-            title = view.findViewById(R.id.stepsTitleText)
-            card = view.findViewById(R.id.stepsAspectCardView)
+            title = view.findViewById(R.id.emotionsTitleText)
+            card = view.findViewById(R.id.emotionsAspectCardVied)
+            description = view.findViewById(R.id.descriptionText)
+            icon = view.findViewById(R.id.emotionsIcon)
         }
     }
 

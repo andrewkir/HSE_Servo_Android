@@ -14,15 +14,25 @@ import ru.andrewkir.servo.network.ApolloProvider
 @Module
 class DataModule {
     @Provides
-    fun provideFinanceRepository(context: Context): FinanceRepository = FinanceRepository(ApolloProvider(context))
+    fun provideFinanceRepository(context: Context): FinanceRepository =
+        FinanceRepository(ApolloProvider(context))
+
     @Provides
-    fun provideAuthRepository(context: Context): AuthRepository = AuthRepository(ApolloProvider(context))
+    fun provideAuthRepository(context: Context): AuthRepository =
+        AuthRepository(ApolloProvider(context))
+
     @Provides
     fun provideProfileRepository(): ProfileRepository = ProfileRepository()
+
     @Provides
     fun provideDashBoardRepository(): DashboardRepository = DashboardRepository()
+
     @Provides
-    fun provideStepsRepository(context: Context): StepsRepository = StepsRepository(ApolloProvider(context))
+    fun provideStepsRepository(context: Context): StepsRepository =
+        StepsRepository(ApolloProvider(context))
+
     @Provides
-    fun provideEmotionsRepository(): EmotionsRepository = EmotionsRepository()
+    fun provideEmotionsRepository(context: Context): EmotionsRepository = EmotionsRepository(
+        ApolloProvider(context)
+    )
 }
