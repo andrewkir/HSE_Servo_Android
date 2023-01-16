@@ -1,0 +1,5 @@
+mutation RemoveEmotion($deleteEmotionalStateRecordId: String!) {
+    deleteEmotionalStateRecord(id: $deleteEmotionalStateRecordId) {
+        id
+    }
+}

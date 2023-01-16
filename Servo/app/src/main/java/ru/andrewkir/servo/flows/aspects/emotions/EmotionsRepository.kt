@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import ru.andrewkir.CreateEmotionalRecordMutation
 import ru.andrewkir.GetEmotionsQuery
 import ru.andrewkir.GetFinancialRecordQuery
+import ru.andrewkir.RemoveEmotionMutation
 import ru.andrewkir.servo.common.BaseRepository
 import ru.andrewkir.servo.flows.aspects.emotions.models.Emotions
 import ru.andrewkir.servo.flows.aspects.emotions.models.EmotionsModel
@@ -34,6 +35,12 @@ class EmotionsRepository(
                     date = emotionsModel.date.toString()
                 )
             )
+        )
+    }
+
+    suspend fun removeEmotion(id: String): ApiResponse<ApolloResponse<RemoveEmotionMutation.Data>> {
+        return protectedApiCall(
+            api.removeEmotion(id)
         )
     }
 }

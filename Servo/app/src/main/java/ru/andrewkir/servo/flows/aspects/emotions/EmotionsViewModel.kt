@@ -54,11 +54,18 @@ class EmotionsViewModel @Inject constructor(
             _emotionsData.value = mEmotionsData
 
             emotionsRepository.addEmotion(emotion)
+            getData()
         }
     }
 
     fun removeEmotion(emotion: EmotionsModel) {
+        viewModelScope.launch {
+            mEmotionsData.remove(emotion)
+            _emotionsData.value = mEmotionsData
 
+            emotionsRepository.removeEmotion(emotion.id ?: "")
+            getData()
+        }
     }
 
     init {

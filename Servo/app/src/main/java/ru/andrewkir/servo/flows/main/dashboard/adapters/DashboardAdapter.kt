@@ -39,14 +39,17 @@ class DashboardAdapter(
             FINANCE_VIEW -> {
                 (this.data.firstOrNull { it.type == DashboardViews.FinanceView } as FinanceEntry)
                     .data = FinanceModel(data as List<FinanceObject>)
+                notifyDataSetChanged()
             }
             STEPS_VIEW -> {
                 (this.data.firstOrNull { it.type == DashboardViews.StepsView } as StepsEntry)
                     .data = StepsModel(data as List<StepsObject>)
+                notifyDataSetChanged()
             }
             EMOTIONS_VIEW -> {
                 (this.data.firstOrNull { it.type == DashboardViews.EmotionsView } as EmotionsEntry)
                     .data = data as List<EmotionsModel>
+                notifyDataSetChanged()
             }
         }
     }

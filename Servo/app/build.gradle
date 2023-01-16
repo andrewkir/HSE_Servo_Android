@@ -57,6 +57,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
     implementation("com.apollographql.apollo3:apollo-runtime:3.7.3")
     implementation 'androidx.fragment:fragment-ktx:1.5.2'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
 
     //navigation

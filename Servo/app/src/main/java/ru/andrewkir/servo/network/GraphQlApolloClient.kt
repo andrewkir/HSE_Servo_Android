@@ -49,4 +49,8 @@ class ApolloProvider(context: Context) : BaseApolloClient() {
     fun getEmotions(): ApolloCall<GetEmotionsQuery.Data> {
         return apolloClient.query(GetEmotionsQuery())
     }
+
+    fun removeEmotion(data: String): ApolloCall<RemoveEmotionMutation.Data> {
+        return apolloClient.mutation(RemoveEmotionMutation(data))
+    }
 }

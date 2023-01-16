@@ -98,19 +98,19 @@ class DashboardFragment :
         adapter.data = viewModel.getCardData()
         itemTouchHelper.attachToRecyclerView(bind.recyclerView)
 
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenCreated {
             viewModel.financeFlow.collect {
                 adapter.updateItem(FINANCE_VIEW, it.financeList)
             }
         }
 
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenCreated {
             viewModel.stepsFlow.collect {
                 adapter.updateItem(STEPS_VIEW, it.stepsList)
             }
         }
 
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenCreated {
             viewModel.emotionsFlow.collect {
                 adapter.updateItem(EMOTIONS_VIEW, it)
             }
@@ -119,6 +119,14 @@ class DashboardFragment :
         viewModel.getData()
         viewModel.getStepsData()
         viewModel.getEmotionsData()
+
+        bind.swipeToRefresh.setOnRefreshListener {
+            viewModel.getData()
+            viewModel.getStepsData()
+            viewModel.getEmotionsData()
+
+            bind.swipeToRefresh.isRefreshing = false
+        }
     }
 
     override fun onDestroyView() {
