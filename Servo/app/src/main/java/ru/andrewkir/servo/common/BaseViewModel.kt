@@ -6,17 +6,12 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
+import ru.andrewkir.servo.network.ApolloProvider
 import ru.andrewkir.servo.network.common.ApiResponse
 
 abstract class BaseViewModel(
     private val repository: BaseRepository
 ) : ViewModel() {
-
-//    suspend fun logoutUser(api: AuthApi): ApiResponse<ResponseBody> {
-//        return withContext(Dispatchers.IO) {
-//            repository.userLogout(api)
-//        }
-//    }
 
     protected val mutableLoading: MutableLiveData<Boolean> = MutableLiveData()
 

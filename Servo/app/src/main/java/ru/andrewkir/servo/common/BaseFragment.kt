@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import kotlinx.coroutines.launch
 import ru.andrewkir.servo.App
+import ru.andrewkir.servo.flows.auth.AuthActivity
 import javax.inject.Inject
 
 
@@ -34,15 +37,10 @@ abstract class BaseFragment<viewModel : BaseViewModel, repo : BaseRepository, vi
         return bind.root
     }
 
-//    fun userLogout() = lifecycleScope.launch {
-//        val refreshToken = userPrefsManager.refreshToken
-//        val api = apiProvider.provideApi(AuthApi::class.java, requireContext(), null, refreshToken)
-//
-//        viewModel.logoutUser(api)
-//
-//        userPrefsManager.clearUser()
-//        requireActivity().startActivityClearBackStack(AuthActivity::class.java)
-//    }
+    fun userLogout() = lifecycleScope.launch {
+        userPrefsManager.clearUser()
+        requireActivity().startActivityClearBackStack(AuthActivity::class.java)
+    }
 
 
     abstract fun provideViewModel(): viewModel
