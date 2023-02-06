@@ -9,8 +9,9 @@ import ru.andrewkir.SigninUserMutation
 import ru.andrewkir.servo.common.BaseViewModel
 import ru.andrewkir.servo.flows.auth.AuthRepository
 import ru.andrewkir.servo.network.common.ApiResponse
+import javax.inject.Inject
 
-class LoginViewModel(
+class LoginViewModel @Inject constructor(
     private val repo: AuthRepository
 ) : BaseViewModel(repo) {
 

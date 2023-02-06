@@ -15,23 +15,4 @@ import ru.andrewkir.servo.flows.main.profile.ProfileRepository
 class AppModule(val context: Context) {
     @Provides
     fun provideContext(): Context = context
-
-    @Provides
-    fun provideViewModelFactory(
-        authRepository: AuthRepository,
-        dashboardRepository: DashboardRepository,
-        profileRepository: ProfileRepository,
-        financeRepository: FinanceRepository,
-        stepsRepository: StepsRepository,
-        emotionsRepository: EmotionsRepository
-    ): ViewModelFactory {
-        return ViewModelFactory(
-            authRepository,
-            dashboardRepository,
-            profileRepository,
-            financeRepository,
-            stepsRepository,
-            emotionsRepository
-        )
-    }
 }

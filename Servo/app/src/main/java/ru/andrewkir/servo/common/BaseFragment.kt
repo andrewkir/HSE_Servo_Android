@@ -22,9 +22,6 @@ abstract class BaseFragment<viewModel : BaseViewModel, repo : BaseRepository, vi
 
     protected lateinit var userPrefsManager: UserPrefsManager
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

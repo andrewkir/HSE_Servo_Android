@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
+import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentAspectStepsBinding
 import ru.andrewkir.servo.flows.aspects.steps.adapters.StepsAdapter
 import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
@@ -38,12 +39,16 @@ import java.time.LocalDateTime
 import java.time.chrono.ChronoLocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
 
 
 class StepsFragment :
     BaseFragment<StepsViewModel, StepsRepository, FragmentAspectStepsBinding>() {
 
     private lateinit var adapter: StepsAdapter
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var selectedDate: Calendar
     private lateinit var weekAgoDate: Calendar

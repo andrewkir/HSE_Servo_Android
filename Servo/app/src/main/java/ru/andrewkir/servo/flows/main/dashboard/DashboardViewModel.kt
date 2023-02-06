@@ -30,11 +30,10 @@ import javax.inject.Inject
 
 
 class DashboardViewModel @Inject constructor(
-    val dashboardRepository: DashboardRepository,
     private val financeRepository: FinanceRepository,
     private val stepsRepository: StepsRepository,
     private val emotionsRepository: EmotionsRepository
-) : BaseViewModel(dashboardRepository) {
+) : BaseViewModel(financeRepository) {
 
     val financeFlow: MutableStateFlow<FinanceModel> by lazy { MutableStateFlow(FinanceModel()) }
 

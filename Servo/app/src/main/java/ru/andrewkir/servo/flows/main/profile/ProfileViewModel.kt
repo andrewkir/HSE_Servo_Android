@@ -4,8 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.andrewkir.servo.common.BaseViewModel
+import javax.inject.Inject
 
-class ProfileViewModel(
+class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository
 ) : BaseViewModel(profileRepository) {
 

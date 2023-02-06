@@ -14,14 +14,19 @@ import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.common.UserPrefsManager
+import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentLoginBinding
 import ru.andrewkir.servo.flows.aspects.finance.FinanceViewModel
 import ru.andrewkir.servo.flows.auth.AuthActivity
 import ru.andrewkir.servo.flows.auth.AuthRepository
 import ru.andrewkir.servo.flows.main.MainScreenActivity
 import ru.andrewkir.servo.network.ApolloProvider
+import javax.inject.Inject
 
 class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLoginBinding>() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun provideViewModel(): LoginViewModel {
         (requireContext().applicationContext as App).appComponent.inject(this)
@@ -100,7 +105,8 @@ class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLogin
         }
 
         bind.registerTextView.setOnClickListener {
-            Navigation.findNavController(bind.root).navigate(R.id.action_loginFragment_to_registerFragment)
+            Navigation.findNavController(bind.root)
+                .navigate(R.id.action_loginFragment_to_registerFragment)
         }
     }
 
@@ -110,6 +116,9 @@ class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLogin
 
             userPrefsManager.accessToken = it.signinUser.session.accessToken
             userPrefsManager.refreshToken = it.signinUser.session.refreshToken
+
+            userPrefsManager.username = it.signinUser.username
+            userPrefsManager.email = it.signinUser.email
 
             startActivity(Intent(requireContext(), MainScreenActivity::class.java))
             activity?.finish()

@@ -13,8 +13,10 @@ import ru.andrewkir.servo.flows.auth.login.LoginFragment
 import ru.andrewkir.servo.flows.auth.register.RegisterFragment
 import ru.andrewkir.servo.flows.main.dashboard.DashboardFragment
 import ru.andrewkir.servo.flows.main.profile.ProfileFragment
+import javax.inject.Singleton
 
-@Component(modules = [AppModule::class, DataModule::class])
+@Component(modules = [AppModule::class, DataModule::class, ViewModelModule::class])
+@Singleton
 interface AppComponent {
     fun inject(baseFragment: BaseFragment<BaseViewModel, BaseRepository, ViewBinding>)
     fun inject(dashboardFragment: DashboardFragment)

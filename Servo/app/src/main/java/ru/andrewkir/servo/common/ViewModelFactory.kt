@@ -16,27 +16,13 @@ import ru.andrewkir.servo.flows.main.dashboard.DashboardViewModel
 import ru.andrewkir.servo.flows.main.profile.ProfileRepository
 import ru.andrewkir.servo.flows.main.profile.ProfileViewModel
 import javax.inject.Inject
+import javax.inject.Provider
+import javax.inject.Singleton
 
-class ViewModelFactory @Inject constructor(
-    val authRepository: AuthRepository,
-    val dashboardRepository: DashboardRepository,
-    val profileRepository: ProfileRepository,
-    val financeRepository: FinanceRepository,
-    val stepsRepository: StepsRepository,
-    val emotionsRepository: EmotionsRepository
-) : ViewModelProvider.NewInstanceFactory() {
+@Singleton
+class ViewModelFactory @Inject constructor(private val viewModels: MutableMap<Class<out ViewModel>,
+        @JvmSuppressWildcards Provider<ViewModel>>): ViewModelProvider.Factory {
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return when {
-            modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(authRepository) as T
-            modelClass.isAssignableFrom(ProfileViewModel::class.java) -> ProfileViewModel(profileRepository) as T
-            modelClass.isAssignableFrom(DashboardViewModel::class.java) -> DashboardViewModel(dashboardRepository, financeRepository, stepsRepository, emotionsRepository) as T
-            modelClass.isAssignableFrom(FinanceViewModel::class.java) -> FinanceViewModel(financeRepository) as T
-            modelClass.isAssignableFrom(StepsViewModel::class.java) -> StepsViewModel(stepsRepository) as T
-            modelClass.isAssignableFrom(EmotionsViewModel::class.java) -> EmotionsViewModel(emotionsRepository) as T
-            modelClass.isAssignableFrom(RegisterViewModel::class.java) -> RegisterViewModel(authRepository) as T
-            else -> throw IllegalArgumentException("Provide correct viewModel class")
-        }
-    }
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
+        viewModels[modelClass]?.get() as T
 }

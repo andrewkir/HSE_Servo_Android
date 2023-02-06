@@ -4,5 +4,7 @@ mutation SigninUser($data: UserSigninInput!) {
             accessToken
             refreshToken
         }
+        username
+        email
     }
 }

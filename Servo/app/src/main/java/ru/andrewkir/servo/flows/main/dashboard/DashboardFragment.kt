@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
+import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentDashboardBinding
 import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment.Companion.setupFinanceView
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
@@ -27,12 +28,16 @@ import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter.Compani
 import ru.andrewkir.servo.flows.main.dashboard.models.DashboardViews
 import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
 import ru.andrewkir.servo.flows.main.dashboard.models.StepsEntry
+import javax.inject.Inject
 
 
 class DashboardFragment :
     BaseFragment<DashboardViewModel, DashboardRepository, FragmentDashboardBinding>() {
 
     private lateinit var adapter: DashboardAdapter
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     private val itemTouchHelper by lazy {
         val simpleItemTouchCallback =

@@ -27,18 +27,24 @@ import kotlinx.coroutines.launch
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
+import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentAspectFinanceBinding
 import ru.andrewkir.servo.flows.aspects.finance.adapters.FinanceAdapter
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
 import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 
 class FinanceFragment :
     BaseFragment<FinanceViewModel, FinanceRepository, FragmentAspectFinanceBinding>() {
 
     private lateinit var adapter: FinanceAdapter
+
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     override fun provideViewModel(): FinanceViewModel {
         (requireContext().applicationContext as App).appComponent.inject(this)

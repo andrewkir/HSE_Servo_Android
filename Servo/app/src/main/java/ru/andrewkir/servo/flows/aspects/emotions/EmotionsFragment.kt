@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
+import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentAspectEmotionsBinding
 import ru.andrewkir.servo.flows.aspects.emotions.adapters.EmotionsAdapter
 import ru.andrewkir.servo.flows.aspects.emotions.models.Emotions.*
@@ -33,10 +34,14 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.logging.Level.parse
+import javax.inject.Inject
 
 
 class EmotionsFragment :
     BaseFragment<EmotionsViewModel, EmotionsRepository, FragmentAspectEmotionsBinding>() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     var curDate: Date = Date()
 
