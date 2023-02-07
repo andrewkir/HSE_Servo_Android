@@ -1,7 +1,6 @@
 package ru.andrewkir.servo.flows.main.dashboard.models
 
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
+import ru.andrewkir.domain.model.StepsModel
 
 data class StepsEntry(
     var data: StepsModel

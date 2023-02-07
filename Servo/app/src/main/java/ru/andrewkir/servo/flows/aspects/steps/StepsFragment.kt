@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
@@ -24,26 +22,24 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.coroutines.flow.collectLatest
+import ru.andrewkir.data.repositories.StepsRepositoryImpl
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentAspectStepsBinding
 import ru.andrewkir.servo.flows.aspects.steps.adapters.StepsAdapter
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
-import ru.andrewkir.type.DateTime
+import ru.andrewkir.domain.model.StepsModel
+import ru.andrewkir.domain.model.StepsObject
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.chrono.ChronoLocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 
 
 class StepsFragment :
-    BaseFragment<StepsViewModel, StepsRepository, FragmentAspectStepsBinding>() {
+    BaseFragment<StepsViewModel, StepsRepositoryImpl, FragmentAspectStepsBinding>() {
 
     private lateinit var adapter: StepsAdapter
 

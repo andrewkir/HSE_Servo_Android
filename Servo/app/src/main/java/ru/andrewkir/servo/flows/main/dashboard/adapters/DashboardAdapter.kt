@@ -12,13 +12,13 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.PieChart
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.flows.aspects.emotions.EmotionsFragment.Companion.setupEmotionsView
-import ru.andrewkir.servo.flows.aspects.emotions.models.EmotionsModel
+import ru.andrewkir.domain.model.EmotionsModel
 import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment.Companion.setupFinanceView
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
+import ru.andrewkir.domain.model.FinanceModel
+import ru.andrewkir.domain.model.FinanceObject
 import ru.andrewkir.servo.flows.aspects.steps.StepsFragment.Companion.setupStepsView
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
+import ru.andrewkir.domain.model.StepsModel
+import ru.andrewkir.domain.model.StepsObject
 import ru.andrewkir.servo.flows.main.dashboard.models.*
 
 class DashboardAdapter(

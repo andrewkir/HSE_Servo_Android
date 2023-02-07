@@ -1,6 +1,6 @@
 package ru.andrewkir.servo.flows.main.profile
 
-import ru.andrewkir.servo.common.BaseRepository
+import ru.andrewkir.domain.repositories.BaseRepository
 
 class ProfileRepository(
     //private val coursesApi: CoursesApi

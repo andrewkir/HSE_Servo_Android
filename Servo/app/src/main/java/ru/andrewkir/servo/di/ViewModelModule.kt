@@ -13,7 +13,6 @@ import ru.andrewkir.servo.flows.auth.login.LoginViewModel
 import ru.andrewkir.servo.flows.auth.register.RegisterViewModel
 import ru.andrewkir.servo.flows.main.dashboard.DashboardViewModel
 import ru.andrewkir.servo.flows.main.profile.ProfileViewModel
-import ru.andrewkir.tinkofftestcase.di.ViewModelKey
 
 @Module
 abstract class ViewModelModule {

@@ -1,22 +1,15 @@
 package ru.andrewkir.servo.flows.aspects.emotions.adapters
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import ru.andrewkir.servo.R
-import ru.andrewkir.servo.flows.aspects.emotions.models.Emotions
-import ru.andrewkir.servo.flows.aspects.emotions.models.EmotionsModel
-import ru.andrewkir.servo.flows.aspects.finance.adapters.FinanceAdapter
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
+import ru.andrewkir.domain.model.Emotions
+import ru.andrewkir.domain.model.EmotionsModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*

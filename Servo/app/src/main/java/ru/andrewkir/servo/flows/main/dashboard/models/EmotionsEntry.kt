@@ -1,7 +1,6 @@
 package ru.andrewkir.servo.flows.main.dashboard.models
 
-import ru.andrewkir.servo.flows.aspects.emotions.models.EmotionsModel
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
+import ru.andrewkir.domain.model.EmotionsModel
 
 data class EmotionsEntry(
     var data: List<EmotionsModel>?

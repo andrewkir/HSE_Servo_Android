@@ -11,23 +11,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.flow.collectLatest
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentDashboardBinding
-import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment.Companion.setupFinanceView
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
-import ru.andrewkir.servo.flows.aspects.steps.StepsFragment.Companion.setupStepsView
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
 import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter
 import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter.Companion.EMOTIONS_VIEW
 import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter.Companion.FINANCE_VIEW
 import ru.andrewkir.servo.flows.main.dashboard.adapters.DashboardAdapter.Companion.STEPS_VIEW
 import ru.andrewkir.servo.flows.main.dashboard.models.DashboardViews
-import ru.andrewkir.servo.flows.main.dashboard.models.FinanceEntry
-import ru.andrewkir.servo.flows.main.dashboard.models.StepsEntry
 import javax.inject.Inject
 
 

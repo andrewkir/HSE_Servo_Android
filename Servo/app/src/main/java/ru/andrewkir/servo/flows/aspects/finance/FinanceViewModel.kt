@@ -3,21 +3,20 @@ package ru.andrewkir.servo.flows.aspects.finance
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import ru.andrewkir.data.repositories.FinanceRepositoryImpl
+import ru.andrewkir.domain.model.ApiResponse
+import ru.andrewkir.domain.model.FinanceCategoryEnum
+import ru.andrewkir.domain.model.FinanceModel
+import ru.andrewkir.domain.model.FinanceObject
+import ru.andrewkir.domain.repositories.FinanceRepository
+import ru.andrewkir.domain.type.FinancialOperation
 import ru.andrewkir.servo.common.BaseViewModel
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
-import ru.andrewkir.servo.network.common.ApiResponse
-import ru.andrewkir.type.FinancialOperation
 import javax.inject.Inject
 
 class FinanceViewModel @Inject constructor(
     val financeRepository: FinanceRepository
-) : BaseViewModel(financeRepository) {
+) : BaseViewModel(financeRepository as FinanceRepositoryImpl) {
 
     var mFinanceData: MutableList<FinanceObject> = mutableListOf()
 

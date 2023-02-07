@@ -3,17 +3,17 @@ package ru.andrewkir.servo.flows.auth.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.apollographql.apollo3.api.Optional
 import kotlinx.coroutines.launch
-import ru.andrewkir.SigninUserMutation
+import ru.andrewkir.data.repositories.AuthRepositoryImpl
+import ru.andrewkir.domain.SigninUserMutation
+import ru.andrewkir.domain.model.ApiResponse
+import ru.andrewkir.domain.repositories.AuthRepository
 import ru.andrewkir.servo.common.BaseViewModel
-import ru.andrewkir.servo.flows.auth.AuthRepository
-import ru.andrewkir.servo.network.common.ApiResponse
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
     private val repo: AuthRepository
-) : BaseViewModel(repo) {
+) : BaseViewModel(repo as AuthRepositoryImpl) {
 
     private val mutableLoginResponse: MutableLiveData<SigninUserMutation.Data> =
         MutableLiveData()
@@ -24,7 +24,7 @@ class LoginViewModel @Inject constructor(
     fun loginByUsername(username: String, password: String) {
         viewModelScope.launch {
             mutableLoading.value = true
-            when(val result = repo.loginByUsername(Optional.presentIfNotNull(username), password)){
+            when(val result = repo.loginByUsername(username, password)){
                 is ApiResponse.OnSuccessResponse -> {
                     mutableLoginResponse.value = result.value.data!!
                 }
@@ -39,7 +39,7 @@ class LoginViewModel @Inject constructor(
     fun loginByEmail(email: String, password: String) {
         viewModelScope.launch {
             mutableLoading.value = true
-            when(val result = repo.loginByEmail(Optional.presentIfNotNull(email), password)){
+            when(val result = repo.loginByEmail(email, password)){
                 is ApiResponse.OnSuccessResponse -> {
                     mutableLoginResponse.value = result.value.data!!
                 }

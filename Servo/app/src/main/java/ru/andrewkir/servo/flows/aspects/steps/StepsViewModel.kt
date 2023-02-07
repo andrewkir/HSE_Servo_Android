@@ -3,27 +3,21 @@ package ru.andrewkir.servo.flows.aspects.steps
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.apollographql.apollo3.api.Optional
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.andrewkir.SigninUserMutation
-import ru.andrewkir.StepsActivityRecordsQuery
+import ru.andrewkir.data.repositories.StepsRepositoryImpl
+import ru.andrewkir.domain.StepsActivityRecordsQuery
+import ru.andrewkir.domain.model.ApiResponse
+import ru.andrewkir.domain.model.StepsModel
+import ru.andrewkir.domain.model.StepsObject
+import ru.andrewkir.domain.repositories.StepsRepository
 import ru.andrewkir.servo.common.BaseViewModel
-import ru.andrewkir.servo.flows.aspects.finance.FinanceRepository
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsModel
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
-import ru.andrewkir.servo.network.common.ApiResponse
-import java.util.Date
 import javax.inject.Inject
 
 class StepsViewModel @Inject constructor(
     val stepsRepository: StepsRepository
-) : BaseViewModel(stepsRepository) {
+) : BaseViewModel(stepsRepository as StepsRepositoryImpl) {
 
     private val _stepsData = MutableStateFlow(StepsModel())
     val stepsData: StateFlow<StepsModel> = _stepsData

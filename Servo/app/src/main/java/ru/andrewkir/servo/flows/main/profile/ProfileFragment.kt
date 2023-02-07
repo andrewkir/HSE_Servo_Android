@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.common.BaseFragment
-import ru.andrewkir.servo.common.UserPrefsManager
+import ru.andrewkir.data.common.UserPrefsManager
 import ru.andrewkir.servo.common.ViewModelFactory
-import ru.andrewkir.servo.databinding.EmptyFragmentBinding
 import ru.andrewkir.servo.databinding.FragmentProfileBinding
 import ru.andrewkir.servo.flows.auth.login.LoginViewModel
 import ru.andrewkir.servo.flows.main.dashboard.DashboardRepository

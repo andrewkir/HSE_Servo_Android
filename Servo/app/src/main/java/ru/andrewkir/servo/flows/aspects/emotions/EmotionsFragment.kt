@@ -18,27 +18,23 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
+import ru.andrewkir.data.repositories.EmotionsRepositoryImpl
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentAspectEmotionsBinding
 import ru.andrewkir.servo.flows.aspects.emotions.adapters.EmotionsAdapter
-import ru.andrewkir.servo.flows.aspects.emotions.models.Emotions.*
-import ru.andrewkir.servo.flows.aspects.emotions.models.EmotionsModel
-import ru.andrewkir.servo.flows.aspects.finance.FinanceFragment
-import ru.andrewkir.servo.flows.aspects.finance.adapters.FinanceAdapter
+import ru.andrewkir.domain.model.Emotions.*
+import ru.andrewkir.domain.model.EmotionsModel
+import ru.andrewkir.domain.repositories.EmotionsRepository
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.logging.Level.parse
 import javax.inject.Inject
 
 
 class EmotionsFragment :
-    BaseFragment<EmotionsViewModel, EmotionsRepository, FragmentAspectEmotionsBinding>() {
+    BaseFragment<EmotionsViewModel, EmotionsRepositoryImpl, FragmentAspectEmotionsBinding>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

@@ -4,21 +4,18 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import ru.andrewkir.data.repositories.EmotionsRepositoryImpl
+import ru.andrewkir.domain.model.ApiResponse
+import ru.andrewkir.domain.model.Emotions
+import ru.andrewkir.domain.model.EmotionsModel
+import ru.andrewkir.domain.repositories.EmotionsRepository
+import ru.andrewkir.domain.type.EmotionalState
 import ru.andrewkir.servo.common.BaseViewModel
-import ru.andrewkir.servo.flows.aspects.emotions.models.Emotions
-import ru.andrewkir.servo.flows.aspects.emotions.models.EmotionsModel
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceModel
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
-import ru.andrewkir.servo.network.common.ApiResponse
-import ru.andrewkir.type.EmotionalState
-import ru.andrewkir.type.FinancialOperation
-import java.util.Date
 import javax.inject.Inject
 
 class EmotionsViewModel @Inject constructor(
     private val emotionsRepository: EmotionsRepository
-) : BaseViewModel(emotionsRepository) {
+) : BaseViewModel(emotionsRepository as EmotionsRepositoryImpl) {
     var mEmotionsData: MutableList<EmotionsModel> = mutableListOf()
 
     private val _emotionsData = MutableStateFlow(listOf(EmotionsModel()))

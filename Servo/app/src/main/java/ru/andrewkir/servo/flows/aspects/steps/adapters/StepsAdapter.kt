@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.andrewkir.servo.R
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
-import ru.andrewkir.servo.flows.aspects.steps.models.StepsObject
-import java.text.DateFormat
-import java.text.SimpleDateFormat
+import ru.andrewkir.domain.model.FinanceObject
+import ru.andrewkir.domain.model.StepsObject
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*

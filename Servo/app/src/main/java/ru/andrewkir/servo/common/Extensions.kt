@@ -5,13 +5,8 @@ import android.content.Intent
 import android.content.res.Resources
 import android.net.Uri
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import org.json.JSONException
-import org.json.JSONObject
-import ru.andrewkir.servo.flows.auth.login.LoginFragment
-import ru.andrewkir.servo.network.common.ApiResponse
 
 
 fun <activity : Activity> Activity.startActivityClearBackStack(activityClass: Class<activity>) {

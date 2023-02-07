@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.launch
-import ru.andrewkir.servo.App
+import ru.andrewkir.data.common.UserPrefsManager
+import ru.andrewkir.domain.repositories.BaseRepository
 import ru.andrewkir.servo.flows.auth.AuthActivity
-import javax.inject.Inject
 
 
 abstract class BaseFragment<viewModel : BaseViewModel, repo : BaseRepository, viewBinding : ViewBinding> :

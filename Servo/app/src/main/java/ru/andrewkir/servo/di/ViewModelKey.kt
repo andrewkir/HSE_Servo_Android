@@ -1,4 +1,4 @@
-package ru.andrewkir.tinkofftestcase.di
+package ru.andrewkir.servo.di
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

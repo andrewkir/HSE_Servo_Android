@@ -13,17 +13,14 @@ import androidx.navigation.Navigation
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
-import ru.andrewkir.servo.common.UserPrefsManager
+import ru.andrewkir.data.common.UserPrefsManager
+import ru.andrewkir.data.repositories.AuthRepositoryImpl
 import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentLoginBinding
-import ru.andrewkir.servo.flows.aspects.finance.FinanceViewModel
-import ru.andrewkir.servo.flows.auth.AuthActivity
-import ru.andrewkir.servo.flows.auth.AuthRepository
 import ru.andrewkir.servo.flows.main.MainScreenActivity
-import ru.andrewkir.servo.network.ApolloProvider
 import javax.inject.Inject
 
-class LoginFragment : BaseFragment<LoginViewModel, AuthRepository, FragmentLoginBinding>() {
+class LoginFragment : BaseFragment<LoginViewModel, AuthRepositoryImpl, FragmentLoginBinding>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory

@@ -15,7 +15,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -24,21 +23,23 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.launch
+import ru.andrewkir.data.repositories.FinanceRepositoryImpl
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.R
 import ru.andrewkir.servo.common.BaseFragment
 import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentAspectFinanceBinding
 import ru.andrewkir.servo.flows.aspects.finance.adapters.FinanceAdapter
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
+import ru.andrewkir.domain.model.FinanceCategoryEnum
+import ru.andrewkir.domain.model.FinanceObject
+import ru.andrewkir.domain.repositories.FinanceRepository
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
 
 class FinanceFragment :
-    BaseFragment<FinanceViewModel, FinanceRepository, FragmentAspectFinanceBinding>() {
+    BaseFragment<FinanceViewModel, FinanceRepositoryImpl, FragmentAspectFinanceBinding>() {
 
     private lateinit var adapter: FinanceAdapter
 

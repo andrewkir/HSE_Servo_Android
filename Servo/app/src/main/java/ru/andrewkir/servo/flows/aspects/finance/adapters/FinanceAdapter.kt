@@ -11,9 +11,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import ru.andrewkir.servo.R
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceCategoryEnum
-import ru.andrewkir.servo.flows.aspects.finance.models.FinanceObject
-import java.text.SimpleDateFormat
+import ru.andrewkir.domain.model.FinanceCategoryEnum
+import ru.andrewkir.domain.model.FinanceObject
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
