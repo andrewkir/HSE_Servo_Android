@@ -1,11 +1,13 @@
 package ru.andrewkir.data.network.common
 
 import android.content.Context
+import android.content.Intent
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import ru.andrewkir.data.common.AuthActivity
 import ru.andrewkir.data.common.UserPrefsManager
 import ru.andrewkir.data.network.ApolloProvider
 import ru.andrewkir.domain.model.ApiResponse
@@ -37,7 +39,16 @@ class JWTAuthenticator(
                         .header("Authorization", "Bearer ${prefsManager.accessToken}")
                         .build()
                 }
-                else -> null
+                else -> {
+                    prefsManager.clearUser()
+                    context.applicationContext.startActivity(
+                        Intent(
+                            context,
+                            AuthActivity::class.java
+                        )
+                    )
+                    null
+                }
             }
         }
     }

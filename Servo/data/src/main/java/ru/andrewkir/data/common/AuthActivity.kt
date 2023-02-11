@@ -1,8 +1,8 @@
-package ru.andrewkir.servo.flows.auth
+package ru.andrewkir.data.common
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ru.andrewkir.servo.R
+import ru.andrewkir.data.R
 
 class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ru.andrewkir.data.common.UserPrefsManager
-import ru.andrewkir.servo.flows.auth.AuthActivity
+import ru.andrewkir.data.common.AuthActivity
 import ru.andrewkir.servo.flows.main.MainScreenActivity
 
 class MainActivity : AppCompatActivity() {

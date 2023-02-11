@@ -10,7 +10,7 @@ import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.launch
 import ru.andrewkir.data.common.UserPrefsManager
 import ru.andrewkir.domain.repositories.BaseRepository
-import ru.andrewkir.servo.flows.auth.AuthActivity
+import ru.andrewkir.data.common.AuthActivity
 
 
 abstract class BaseFragment<viewModel : BaseViewModel, repo : BaseRepository, viewBinding : ViewBinding> :
