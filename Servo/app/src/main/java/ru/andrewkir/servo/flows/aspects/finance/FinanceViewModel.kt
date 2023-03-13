@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.andrewkir.data.repositories.FinanceRepositoryImpl
 import ru.andrewkir.domain.model.ApiResponse
 import ru.andrewkir.domain.model.FinanceCategoryEnum
 import ru.andrewkir.domain.model.FinanceModel
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 class FinanceViewModel @Inject constructor(
     val financeRepository: FinanceRepository
-) : BaseViewModel(financeRepository as FinanceRepositoryImpl) {
+) : BaseViewModel() {
 
     var mFinanceData: MutableList<FinanceObject> = mutableListOf()
 

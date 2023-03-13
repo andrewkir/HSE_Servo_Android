@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.andrewkir.data.repositories.StepsRepositoryImpl
 import ru.andrewkir.domain.StepsActivityRecordsQuery
 import ru.andrewkir.domain.model.ApiResponse
 import ru.andrewkir.domain.model.StepsModel
@@ -17,7 +16,7 @@ import javax.inject.Inject
 
 class StepsViewModel @Inject constructor(
     val stepsRepository: StepsRepository
-) : BaseViewModel(stepsRepository as StepsRepositoryImpl) {
+) : BaseViewModel() {
 
     private val _stepsData = MutableStateFlow(StepsModel())
     val stepsData: StateFlow<StepsModel> = _stepsData

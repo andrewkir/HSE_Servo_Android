@@ -4,11 +4,30 @@ import com.apollographql.apollo3.api.Optional
 import ru.andrewkir.data.network.ApolloProvider
 import ru.andrewkir.domain.repositories.AuthRepository
 import ru.andrewkir.domain.repositories.BaseRepository
+import ru.andrewkir.domain.type.UserCreateInput
 import ru.andrewkir.domain.type.UserSigninInput
 
 class AuthRepositoryImpl(
     private val api: ApolloProvider
 ) : AuthRepository, BaseRepository() {
+
+    override suspend fun register(
+        email: String,
+        username: String,
+        password: String,
+        firstName: String,
+        lastName: String
+    ) = protectedApiCall(
+        api.signUpUser(
+            UserCreateInput(
+                email,
+                username,
+                password,
+                firstName,
+                lastName
+            )
+        )
+    )
 
     override suspend fun loginByEmail(
         email: String,
@@ -33,12 +52,4 @@ class AuthRepositoryImpl(
             )
         )
     )
-//
-//    suspend fun register(
-//        email: String,
-//        username: String,
-//        password: String
-//    ) = protectedApiCall {
-//        api.getCharacters(0)
-//    }
 }

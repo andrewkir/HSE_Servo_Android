@@ -3,11 +3,9 @@ package ru.andrewkir.servo.flows.main.dashboard
 //import ru.andrewkir.hse_mooc.network.responses.ApiResponse
 //import ru.andrewkir.hse_mooc.network.responses.Categories.CategoriesResponse
 //import ru.andrewkir.hse_mooc.network.responses.CoursesPreview.CoursePreview
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import ru.andrewkir.data.repositories.FinanceRepositoryImpl
 import ru.andrewkir.domain.model.*
 import ru.andrewkir.domain.repositories.EmotionsRepository
 import ru.andrewkir.domain.repositories.FinanceRepository
@@ -27,7 +25,7 @@ class DashboardViewModel @Inject constructor(
     private val financeRepository: FinanceRepository,
     private val stepsRepository: StepsRepository,
     private val emotionsRepository: EmotionsRepository
-) : BaseViewModel(financeRepository as FinanceRepositoryImpl) {
+) : BaseViewModel() {
 
     val financeFlow: MutableStateFlow<FinanceModel> by lazy { MutableStateFlow(FinanceModel()) }
 

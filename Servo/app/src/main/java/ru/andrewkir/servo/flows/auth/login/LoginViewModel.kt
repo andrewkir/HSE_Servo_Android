@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.andrewkir.data.repositories.AuthRepositoryImpl
 import ru.andrewkir.domain.SigninUserMutation
 import ru.andrewkir.domain.model.ApiResponse
 import ru.andrewkir.domain.repositories.AuthRepository
@@ -13,7 +12,7 @@ import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
     private val repo: AuthRepository
-) : BaseViewModel(repo as AuthRepositoryImpl) {
+) : BaseViewModel() {
 
     private val mutableLoginResponse: MutableLiveData<SigninUserMutation.Data> =
         MutableLiveData()

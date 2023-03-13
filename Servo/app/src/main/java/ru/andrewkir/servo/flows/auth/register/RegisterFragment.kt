@@ -17,7 +17,8 @@ import ru.andrewkir.servo.common.ViewModelFactory
 import ru.andrewkir.servo.databinding.FragmentRegisterBinding
 import javax.inject.Inject
 
-class RegisterFragment : BaseFragment<RegisterViewModel, AuthRepositoryImpl, FragmentRegisterBinding>() {
+class RegisterFragment :
+    BaseFragment<RegisterViewModel, AuthRepositoryImpl, FragmentRegisterBinding>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -90,12 +91,14 @@ class RegisterFragment : BaseFragment<RegisterViewModel, AuthRepositoryImpl, Fra
         bind.registerButton.setOnClickListener {
             val login = bind.loginTextInput.editText?.text.toString()
             val password = bind.passwordTextInput.editText?.text.toString()
+            val email = bind.emailTextInput.editText?.text.toString()
 
-            viewModel.register(login, password)
+            viewModel.register(email, login, password)
         }
 
         bind.loginTextView.setOnClickListener {
-            Navigation.findNavController(bind.root).navigate(R.id.action_registerFragment_to_loginFragment)
+            Navigation.findNavController(bind.root)
+                .navigate(R.id.action_registerFragment_to_loginFragment)
         }
     }
 

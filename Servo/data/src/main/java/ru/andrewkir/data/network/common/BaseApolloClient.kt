@@ -24,64 +24,7 @@ open class BaseApolloClient {
                     context
                 )
             )
-//            .okHttpClient(
-//                provideOkHTPPClient(
-//                    JWTAuthenticator(context),
-//                    UserPrefsManager(context).accessToken ?: "",
-//                    UserPrefsManager(context).refreshToken ?: ""
-//                )
-//            )
             .httpExposeErrorBody(true)
             .build()
 
-    class AuthorizationInterceptor(val token: String) : HttpInterceptor {
-        override suspend fun intercept(
-            request: HttpRequest,
-            chain: HttpInterceptorChain
-        ): HttpResponse {
-            return chain.proceed(
-                request.newBuilder().addHeader("Authorization", "Bearer $token").build()
-            )
-        }
-    }
-
-    private fun provideOkHTPPClient(
-        authenticator: JWTAuthenticator? = null,
-        accessToken: String? = null,
-        refreshToken: String? = null
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
-            .addInterceptor { chain ->
-                chain.proceed(
-                    chain.request().newBuilder().also {
-                        it.addHeader("Accept", "application/json")
-                        if (accessToken != null) {
-                            it.addHeader(
-                                "Authorization",
-                                "Bearer $accessToken"
-                            )
-                        }
-                        if (refreshToken != null) {
-                            it.addHeader(
-                                "x-refresh-token",
-                                "$refreshToken"
-                            )
-                        }
-                    }.build()
-                )
-            }
-            .also { client ->
-                if (BuildConfig.DEBUG) {
-                    val logging = HttpLoggingInterceptor()
-                    logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-                    client.addInterceptor(logging)
-                }
-                if (authenticator != null) {
-                    client.authenticator(authenticator)
-                }
-            }.build()
-    }
 }

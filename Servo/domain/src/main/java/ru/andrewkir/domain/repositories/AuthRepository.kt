@@ -1,8 +1,8 @@
 package ru.andrewkir.domain.repositories
 
 import com.apollographql.apollo3.api.ApolloResponse
-import com.apollographql.apollo3.api.Optional
 import ru.andrewkir.domain.SigninUserMutation
+import ru.andrewkir.domain.SignupUserMutation
 import ru.andrewkir.domain.model.ApiResponse
 
 interface AuthRepository {
@@ -15,4 +15,12 @@ interface AuthRepository {
         username: String,
         password: String
     ): ApiResponse<ApolloResponse<SigninUserMutation.Data>>
+
+    suspend fun register(
+        email: String,
+        username: String,
+        password: String,
+        firstName: String,
+        lastName: String
+    ): ApiResponse<ApolloResponse<SignupUserMutation.Data>>
 }

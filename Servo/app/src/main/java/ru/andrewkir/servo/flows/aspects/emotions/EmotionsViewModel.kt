@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import ru.andrewkir.data.repositories.EmotionsRepositoryImpl
 import ru.andrewkir.domain.model.ApiResponse
 import ru.andrewkir.domain.model.Emotions
 import ru.andrewkir.domain.model.EmotionsModel
@@ -15,7 +14,7 @@ import javax.inject.Inject
 
 class EmotionsViewModel @Inject constructor(
     private val emotionsRepository: EmotionsRepository
-) : BaseViewModel(emotionsRepository as EmotionsRepositoryImpl) {
+) : BaseViewModel() {
     var mEmotionsData: MutableList<EmotionsModel> = mutableListOf()
 
     private val _emotionsData = MutableStateFlow(listOf(EmotionsModel()))
