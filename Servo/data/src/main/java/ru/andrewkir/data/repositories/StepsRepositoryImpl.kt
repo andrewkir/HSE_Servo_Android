@@ -13,23 +13,14 @@ import ru.andrewkir.domain.type.StepsActivityRecordCreateInput
 class StepsRepositoryImpl(
     private val api: ApolloProvider
 ) : StepsRepository, BaseRepository() {
-    override fun getData(): MutableStateFlow<StepsModel> {
-        return MutableStateFlow(
-            StepsModel(
-                arrayListOf(
-                )
-            )
-        )
-    }
 
-    override fun addSteps(stepsObject: StepsObject) {
+    override suspend fun addSteps(stepsObject: StepsObject) = protectedApiCall(
         api.addSteps(
             StepsActivityRecordCreateInput(
-                date = presentIfNotNull(stepsObject.date),
-                stepsCount = stepsObject.steps
+                date = presentIfNotNull(stepsObject.date), stepsCount = stepsObject.steps
             )
         )
-    }
+    )
 
     override suspend fun getSteps() = protectedApiCall(
         api.getSteps()
