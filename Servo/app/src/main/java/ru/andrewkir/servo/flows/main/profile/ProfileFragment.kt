@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import ru.andrewkir.servo.App
 import ru.andrewkir.servo.common.BaseFragment
@@ -34,11 +35,25 @@ class ProfileFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bind.logoutButton.setOnClickListener {
-            userLogout()
-        }
         val userPrefsManager = UserPrefsManager(requireContext())
         bind.username.text = userPrefsManager.username
         bind.email.text = userPrefsManager.email
+
+        setupLogout()
+    }
+
+    private fun setupLogout() {
+        bind.logoutButton.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Выход из приложения")
+                .setMessage("Вы действительно хотите выйти из приложения?")
+                .setNeutralButton("Отмена") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Да") { _, _ ->
+                    userLogout()
+                }
+                .show()
+        }
     }
 }
